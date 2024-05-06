@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('job_id');           // temp FK
             $table->bigInteger('candidate_id');     // temp FK
+            $table->enum('status', ['applied', 'cancelled']);
             $table->timestamps();
         });
     }

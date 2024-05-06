@@ -17,7 +17,9 @@ class ApplicationFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'job_id' => fake()->randomNumber(),
+            'candidate_id' => fake()->randomNumber(),
+            'status' => fake()->randomElement(['applied', 'cancelled']),
         ];
     }
 }
