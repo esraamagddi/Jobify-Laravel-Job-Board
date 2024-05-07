@@ -1,13 +1,17 @@
 <?php
 
 namespace App\Models;
-
-use Illuminate\Contracts\Queue\Job;
+use App\Models\Candidate;
+use App\Models\Job;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Application extends Model
+class Application extends Model implements HasMedia
 {
+    use InteractsWithMedia;
+
     use HasFactory;
     public function candidate()
     {
