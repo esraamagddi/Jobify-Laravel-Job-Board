@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Contracts\Queue\Job;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Js;
 
 class Application extends Model
 {
