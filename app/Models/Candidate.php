@@ -14,4 +14,10 @@ class Candidate extends Model
         return $this->hasMany(Application::class);
     }
 
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+    ];
+
 }

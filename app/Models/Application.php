@@ -19,4 +19,12 @@ class Application extends Model
         return $this->belongsTo(Job::class);
     }
 
+    protected $fillable = [
+        'job_id',
+        'candidate_id',
+        'resume',
+        'contact_details',
+        'status',
+    ];
+
 }
