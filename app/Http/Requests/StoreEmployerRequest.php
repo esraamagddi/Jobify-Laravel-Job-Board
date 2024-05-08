@@ -3,6 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class StoreEmployerRequest extends FormRequest
 {
@@ -47,5 +50,12 @@ class StoreEmployerRequest extends FormRequest
             'industry.max'=>'maximum length for industry is 50 letters',
             'logo.max'=> 'maximum length for logo name is 50 letters',
         ];
+    }
+    protected function failedValidation(Validator $validator)
+    {
+            $errors = (new ValidationException($validator))->errors();
+            throw new HttpResponseException(
+                response()->json(['data' => $errors], 422)
+            );
     }
 }

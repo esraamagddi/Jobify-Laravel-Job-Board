@@ -9,18 +9,14 @@ use App\Http\Resources\EmployerResource;
 use App\Http\Helpers\UploadImages;
 use App\Http\Exceptions\Handler;
 use Exception;
+use Illuminate\Validation\ValidationException;
+use GuzzleHttp\Psr7\Message;
 
 class EmployerController extends Controller
 {
 
     private $uploader;
-    /* public function __construct(){
-        $handler = new CustomExceptionHandler();
-    } */
-
-    /**
-     * Display a listing of the resource.
-     */
+  
     public function __construct()
     {
         $this->uploader = new UploadImages();
@@ -42,11 +38,11 @@ class EmployerController extends Controller
             $employer = Employer::create($new_employer);
             $employer->save();
             return new EmployerResource($employer);
-        }catch(Exception $e){
-            throw $e;
+        } catch (Exception $e) {
+            // Handle other exceptions
+            return response()->json(['message' => $e], 500);
         }
     }
-
     /**
      * Display the specified resource.
      */
