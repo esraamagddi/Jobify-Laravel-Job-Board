@@ -10,7 +10,7 @@ use App\Http\Resources\EmployerResource;
 
 class EmployerController extends Controller
 {
-   
+
 private $handler;
 /* public function __construct(){
     $handler = new CustomExceptionHandler();
@@ -19,7 +19,7 @@ private $handler;
     /**
      * Display a listing of the resource.
      */
-    
+
     public function index()
     {
         $employers = Employer::all();
