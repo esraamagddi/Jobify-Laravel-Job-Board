@@ -4,22 +4,27 @@ namespace App\Http\Controllers;
 
 use App\Models\Employer;
 use Illuminate\Http\Request;
-use App\Http\Excpetions\CustomExceptionHandler;
 use App\Http\Requests\StoreEmployerRequest;
 use App\Http\Resources\EmployerResource;
+use App\Http\Helpers\UploadImages;
+use App\Http\Exceptions\Handler;
+use Exception;
 
 class EmployerController extends Controller
 {
 
-private $handler;
-/* public function __construct(){
-    $handler = new CustomExceptionHandler();
-} */
-
+    private $uploader;
+    /* public function __construct(){
+        $handler = new CustomExceptionHandler();
+    } */
+    
     /**
      * Display a listing of the resource.
      */
-
+    public function __construct()
+    {
+        $this->uploader = new UploadImages();
+    }  
     public function index()
     {
         $employers = Employer::all();
@@ -31,12 +36,14 @@ private $handler;
      */
     public function store(StoreEmployerRequest $request)
     {
-        try {
-        $employer = Employer::create($request->all());
-        $employer->save();
-        return new EmployerResource($employer);
-        } catch (\Exception $e) {
-            return back()->with("error", $e->getMessage());
+        try{
+            $new_employer = $request->all();
+            $new_employer['logo'] = $this->uploader->file_operations($request,'logo');
+            $employer = Employer::create($new_employer);
+            $employer->save();
+            return new EmployerResource($employer);
+        }catch(Exception $e){
+            throw $e; 
         }
     }
 
