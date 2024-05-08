@@ -19,7 +19,7 @@ return new class extends Migration
             $table->text('skills');
             $table->text('qualifications');
             $table->string('salary_range');
-            $table->enum('work_type', ['Full-time', 'Part-time', 'Freelance']);
+            $table->enum('work_type', ['offline', 'remote', 'hybrid']);
             $table->string('location');
             $table->date('deadline');
             $table->timestamps();
