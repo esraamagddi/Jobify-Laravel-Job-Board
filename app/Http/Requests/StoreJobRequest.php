@@ -11,7 +11,7 @@ class StoreJobRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,36 @@ class StoreJobRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title' => 'required|max:50|min:3',
+            'description' => 'required',
+            'responsibilities' => 'required',
+            'skills' => 'required',
+            'qualifications' => 'required',
+            'salary_range' => 'required',
+            'work_type' => 'required',
+            'location' => 'required',
+            'deadline' => 'required',
+            'employer' => 'required',
+            'category' => 'required',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'title.required' => 'title is required',
+            'title.max'=>'maximum length for title is 50 letters',
+            'title.min' => 'minimum length for title is 3 letters',
+            'description.required' => 'description is required',
+            'responsibilities.required' => 'responsibilities are required',
+            'skills.required' => 'skills are required',
+            'qualifications.required' => 'qualifications are required',
+            'salary_range.required' => 'salary range is required',
+            'work_type.required' => 'work type is required',
+            'location.required' => 'location is required',
+            'deadline.required' => 'deadline is required',
+            'employer.required' => 'employer is required',
+            'category.required' => 'category is required',
         ];
     }
 }

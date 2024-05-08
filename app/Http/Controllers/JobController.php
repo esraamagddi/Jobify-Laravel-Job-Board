@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Job;
 use Illuminate\Http\Request;
+use App\Models\Job;
+use App\Http\Requests\StoreJobRequest;
+use App\Http\Resources\JobResource;
 
 class JobController extends Controller
 {
@@ -12,7 +14,8 @@ class JobController extends Controller
      */
     public function index()
     {
-        //
+        $jobs = Job::paginate(3);
+        return JobResource::collection($jobs);
     }
 
     /**
@@ -20,7 +23,13 @@ class JobController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $employer = Job::create($request->all());
+            $employer->save();
+            return new JobResource($employer);
+        } catch (\Exception $e) {
+            return back()->with("error", $e->getMessage());
+        }
     }
 
     /**
@@ -28,7 +37,7 @@ class JobController extends Controller
      */
     public function show(Job $job)
     {
-        //
+        return new JobResource($job);
     }
 
     /**
