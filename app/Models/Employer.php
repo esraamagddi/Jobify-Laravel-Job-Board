@@ -11,6 +11,12 @@ class Employer extends Model
 {
     use HasFactory;
     protected $fillable = ['name','email','password','industry','logo'];
+    protected function casts(): array
+    {
+        return [
+            'password' => 'hashed',
+        ];
+    }
 
     public function jobs(): HasMany
     {
