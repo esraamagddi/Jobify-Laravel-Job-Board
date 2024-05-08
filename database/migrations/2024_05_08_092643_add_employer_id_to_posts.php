@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('jobs', function (Blueprint $table) {
+        Schema::table('posts', function (Blueprint $table) {
             $table->foreignId('employer_id')->constrained(
-                table: 'employers', indexName: 'jobs_employer_id'
+                table: 'employers', indexName: 'posts_employer_id'
             )->onUpdate('cascade')
             ->onDelete('cascade');
         });
@@ -24,8 +24,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('jobs', function (Blueprint $table) {
-            $table->dropForeign('jobs_employer_id_foreign');
+        Schema::table('posts', function (Blueprint $table) {
+            $table->dropForeign('posts_employer_id_foreign');
         });
     }
 };

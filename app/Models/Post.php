@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Employer;
 use App\Models\Category;
 
-class Job extends Model
+class Post extends Model
 {
     use HasFactory;
 

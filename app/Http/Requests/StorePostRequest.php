@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreJobRequest extends FormRequest
+class StorePostRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -31,8 +31,8 @@ class StoreJobRequest extends FormRequest
             'work_type' => 'required',
             'location' => 'required',
             'deadline' => 'required',
-            'employer' => 'required',
-            'category' => 'required',
+            'employer_id' => 'required',
+            'category_id' => 'required',
         ];
     }
 
@@ -50,8 +50,8 @@ class StoreJobRequest extends FormRequest
             'work_type.required' => 'work type is required',
             'location.required' => 'location is required',
             'deadline.required' => 'deadline is required',
-            'employer.required' => 'employer is required',
-            'category.required' => 'category is required',
+            'employer_id.required' => 'employer is required',
+            'category_id.required' => 'category is required',
         ];
     }
 }
