@@ -14,7 +14,10 @@ class JobSearchController extends Controller
         if ($request->filled('keywords')) {
             $query->where(function ($q) use ($request) {
                 $q->where('title', 'like', '%' . $request->keywords . '%')
-                  ->orWhere('description', 'like', '%' . $request->keywords . '%');
+                  ->orWhere('description', 'like', '%' . $request->keywords . '%')
+                  ->orWhere('responsibilities', 'like', '%' . $request->keywords . '%')
+                  ->orWhere('skills', 'like', '%' . $request->keywords . '%')
+                  ->orWhere('qualifications', 'like', '%' . $request->keywords . '%');
             });
         }
 
@@ -32,18 +35,22 @@ class JobSearchController extends Controller
 
         if ($request->filled('salary_range')) {
             $salaryRange = explode('-', $request->salary_range);
-            $query->whereBetween('salary', [trim($salaryRange[0]), trim($salaryRange[1])]);
+            $query->whereBetween('salary_range', [trim($salaryRange[0]), trim($salaryRange[1])]);
         }
 
-        if ($request->filled('date_posted')) {
-            $query->whereDate('created_at', '=', $request->date_posted);
+        if ($request->filled('work_type')) {
+            $query->where('work_type', $request->work_type);
+        }
+
+        if ($request->filled('deadline')) {
+            $query->whereDate('deadline', '=', $request->deadline);
         }
 
         if ($request->filled('employer_name')) {
             $query->whereHas('employer', function ($query) use ($request) {
                 $query->where('name', 'like', '%' . $request->employer_name . '%');
-            });
-        }
+           });
+         }
 
 
         $jobs = $query->with('category')->paginate(10); // Paginate results
