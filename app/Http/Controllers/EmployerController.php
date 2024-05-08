@@ -17,17 +17,17 @@ class EmployerController extends Controller
     /* public function __construct(){
         $handler = new CustomExceptionHandler();
     } */
-    
+
     /**
      * Display a listing of the resource.
      */
     public function __construct()
     {
         $this->uploader = new UploadImages();
-    }  
+    }
     public function index()
     {
-        $employers = Employer::all();
+        $employers = Employer::paginate(10);
         return EmployerResource::collection($employers);
     }
 
@@ -43,7 +43,7 @@ class EmployerController extends Controller
             $employer->save();
             return new EmployerResource($employer);
         }catch(Exception $e){
-            throw $e; 
+            throw $e;
         }
     }
 
@@ -52,7 +52,7 @@ class EmployerController extends Controller
      */
     public function show(Employer $employer)
     {
-       return new EmployerResource($employer);
+        return new EmployerResource($employer);
     }
 
     /**
