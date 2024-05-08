@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\EmployerController;
 use App\Http\Controllers\JobController;
 use Illuminate\Http\Request;
@@ -12,3 +13,5 @@ Route::get('/user', function (Request $request) {
 Route::apiResource('employers',EmployerController::class);
 
 Route::apiResource('jobs',JobController::class);
+
+Route::apiResource('categories', CategoryController::class);
