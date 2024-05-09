@@ -2,23 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Exceptions\Handler;
 use App\Models\Employer;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreEmployerRequest;
 use App\Http\Resources\EmployerResource;
 use App\Http\Helpers\UploadImages;
-use App\Http\Exceptions\Handler;
 use Exception;
-use Illuminate\Validation\ValidationException;
-use GuzzleHttp\Psr7\Message;
 
 class EmployerController extends Controller
 {
 
     private $uploader;
-  
-    public function __construct()
+    private $handler;
+
+    public function __construct(Handler $handler)
     {
+        $this->handler = $handler;
         $this->uploader = new UploadImages();
     }
     public function index()
@@ -39,16 +39,15 @@ class EmployerController extends Controller
             $employer->save();
             return new EmployerResource($employer);
         } catch (Exception $e) {
-            // Handle other exceptions
-            return response()->json(['message' => $e], 500);
+            return $this->handler->render($request, $e);
         }
     }
     /**
      * Display the specified resource.
      */
-    public function show(Employer $employer)
+    public function show(Request $request,Employer $employer)
     {
-        return new EmployerResource($employer);
+            return new EmployerResource($employer);
     }
 
     /**
@@ -63,6 +62,7 @@ class EmployerController extends Controller
      */
     public function destroy(Employer $employer)
     {
-        //
+        $employer->delete();
+        return response()->json(["message" => 'employer deleted successfully']);
     }
 }

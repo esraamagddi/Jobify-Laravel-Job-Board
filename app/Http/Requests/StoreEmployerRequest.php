@@ -10,11 +10,11 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 class StoreEmployerRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * DeterSymfony\\Component\\HttpKernel\\Exception\\NotFoundHttpExceptionmine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        return false;
     }
 
     /**
