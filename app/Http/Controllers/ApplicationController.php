@@ -71,7 +71,41 @@ class ApplicationController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'candidate_id' => 'required|integer',
+            'resume' => 'file|mimes:pdf|max:2048',
+            'contact_details' => 'nullable|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $application = Application::find($id);
+
+        if ($application == null){
+            return response()->json(["error"=>"application not found"],404);
+        }
+
+        $filePath = $application->resume;
+
+        if ($request->hasFile("resume")) {
+
+            if (file_exists(public_path('storage/' . $filePath))) {
+                unlink(public_path('storage/' . $filePath));
+            }
+
+            $file = $request->file('resume');
+            $filePath = $file->store('resumes', 'public');
+        }
+
+        $application->update([
+            'candidate_id' => $request->candidate_id,
+            'resume' => $filePath,
+            'contact_details' => $request->contact_details,
+        ]);
+
+        return new ApplicationResource($application);
     }
 
     /**
