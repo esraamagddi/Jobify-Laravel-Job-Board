@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\DB;
 
 use App\Models\Job;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class JobSearchController extends Controller
@@ -57,6 +59,19 @@ class JobSearchController extends Controller
 
         return response()->json($jobs);
     }
+
+    public function getLocations()
+{
+    $locations = Job::select('location')->distinct()->get();
+    return response()->json($locations);
+}
+
+public function getCategories()
+{
+    $categories = Category::all();
+    return response()->json($categories);
+}
+
 }
 
 ?>

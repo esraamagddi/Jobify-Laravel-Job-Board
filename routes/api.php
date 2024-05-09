@@ -10,3 +10,9 @@ Route::get('/user', function (Request $request) {
 
 Route::get('/jobs/search', [JobSearchController::class, 'search']);
   //   ->middleware('auth:sanctum');
+
+Route::get('/locations', [JobSearchController::class, 'getLocations']);
+
+Route::get('/categories', [JobSearchController::class, 'getCategories']);
+
+
