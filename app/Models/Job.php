@@ -9,16 +9,19 @@ class Job extends Model
 {
     use HasFactory;
     protected $fillable = [
-        // 'employer_id',
         'title',
         'description',
         'responsibilities',
         'requirements',
         'benefits',
         'location',
-        'type',
         'salary_min',
         'salary_max',
         'application_deadline',
     ];
+
+    // public function applications()
+    // {
+    //     return $this->hasMany(Application::class);
+    // }
 }

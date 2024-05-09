@@ -20,7 +20,7 @@ return new class extends Migration
             $table->text('requirements')->nullable();
             $table->text('benefits')->nullable();
             $table->string('location');
-            $table->enum('type', ['remote', 'on_site'])->default('remote');
+            // $table->enum('type', ['remote', 'on_site'])->default('remote');
             $table->decimal('salary_min', 10, 2)->nullable();
             $table->decimal('salary_max', 10, 2)->nullable();
             $table->date('application_deadline')->nullable();

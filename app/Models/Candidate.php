@@ -9,15 +9,11 @@ use Illuminate\Database\Eloquent\Model;
 class Candidate extends Model
 {
     use HasFactory;
-    public function applications()
-    {
-        return $this->hasMany(Application::class);
-    }
 
     protected $fillable = [
-        'name',
         'email',
         'password',
+
     ];
 
 }
