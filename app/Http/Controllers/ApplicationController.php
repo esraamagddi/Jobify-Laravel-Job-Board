@@ -53,6 +53,17 @@ class ApplicationController extends Controller
     public function show(string $id)
     {
         //
+        $application = Application::find($id);
+
+        if ($application == null){
+
+           return  response()->json([
+             "error"=>"application not found"
+           ],404);
+        }
+
+        return new ApplicationResource($application);
+
     }
 
     /**
