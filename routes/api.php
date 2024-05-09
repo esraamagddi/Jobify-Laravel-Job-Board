@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\EmployerController;
 use App\Http\Controllers\PostController;
@@ -25,3 +26,6 @@ Route::get('/locations', [JobSearchController::class, 'getLocations']);
 Route::get('/categories', [JobSearchController::class, 'getCategories']);
 
 
+
+
+Route::resource('applications', ApplicationController::class);
