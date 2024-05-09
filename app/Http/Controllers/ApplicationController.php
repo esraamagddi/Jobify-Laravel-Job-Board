@@ -1,11 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Application;
 
 use Illuminate\Http\Request;
 use App\Http\Resources\ApplicationResource;
 use Illuminate\Support\Facades\Validator;
+
 class ApplicationController extends Controller
 {
     /**
@@ -55,15 +57,14 @@ class ApplicationController extends Controller
         //
         $application = Application::find($id);
 
-        if ($application == null){
+        if ($application == null) {
 
-           return  response()->json([
-             "error"=>"application not found"
-           ],404);
+            return  response()->json([
+                "error" => "application not found"
+            ], 404);
         }
 
         return new ApplicationResource($application);
-
     }
 
     /**
@@ -83,8 +84,8 @@ class ApplicationController extends Controller
 
         $application = Application::find($id);
 
-        if ($application == null){
-            return response()->json(["error"=>"application not found"],404);
+        if ($application == null) {
+            return response()->json(["error" => "application not found"], 404);
         }
 
         $filePath = $application->resume;
@@ -113,6 +114,21 @@ class ApplicationController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $application = Application::find($id);
+
+        if ($application == null) {
+            return response()->json(["error" => "application not found"], 404);
+        }
+
+        $filePath = $application->resume;
+
+
+        $application->delete();
+
+        if ($filePath && file_exists(public_path('storage/' . $filePath))) {
+            unlink(public_path('storage/' . $filePath));
+        }
+
+        return response()->json(["message" => "application deleted successfully"], 200);
     }
 }
