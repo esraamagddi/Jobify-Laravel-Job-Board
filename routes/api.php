@@ -9,4 +9,5 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 
-Route::post('/applications', [ApplicationController::class, 'store']);
+// Route::post('/applications', [ApplicationController::class, 'store']);
+Route::resource('applications', ApplicationController::class);

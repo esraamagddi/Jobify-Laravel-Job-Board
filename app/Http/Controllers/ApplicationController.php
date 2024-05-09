@@ -13,7 +13,9 @@ class ApplicationController extends Controller
      */
     public function index()
     {
-        //
+        $applications = Application::all();
+
+        return ApplicationResource::collection($applications);
     }
 
     /**
