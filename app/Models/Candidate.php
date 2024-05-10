@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Console\Application;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Application;
 
 class Candidate extends Model
 {
@@ -15,5 +15,11 @@ class Candidate extends Model
         'password',
 
     ];
+
+    public function applications()
+    {
+        return $this->hasMany(Application::class);
+    }
+
 
 }

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Employer;
 use App\Models\Category;
-
+use App\Models\Application;
 class Post extends Model
 {
     use HasFactory;
@@ -21,5 +21,10 @@ class Post extends Model
     public function category()
     {
         return $this->belongsTo(Category::class, 'category_id', 'id');
+    }
+
+    public function applications()
+    {
+        return $this->hasMany(Application::class);
     }
 }

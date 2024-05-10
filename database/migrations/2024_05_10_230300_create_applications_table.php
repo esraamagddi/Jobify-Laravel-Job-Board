@@ -14,11 +14,13 @@ return new class extends Migration
         Schema::create('applications', function (Blueprint $table) {
             $table->id();
             $table->foreignId('candidate_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            // $table->foreignId('job_id')->constrained();
+            $table->foreignId('post_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('resume')->nullable();
             $table->text('contact_details')->nullable();
             $table->enum('status', ['pending', 'accepted', 'rejected'])->default('pending');
             $table->timestamps();
+
+
         });
     }
 

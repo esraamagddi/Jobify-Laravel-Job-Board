@@ -2,7 +2,7 @@
 
 namespace App\Models;
 use App\Models\Candidate;
-use App\Models\Job;
+use App\Models\Post;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
@@ -17,7 +17,7 @@ class Application extends Model implements HasMedia
 
     protected $fillable = [
         'candidate_id',
-        // 'job_id',
+        'post_id',
         'resume',
         'contact_details',
         'status',
@@ -25,11 +25,11 @@ class Application extends Model implements HasMedia
 
     public function candidate()
     {
-        return $this->belongsTo(Candidate::class);
+        return $this->belongsTo(Candidate::class,'candidate_id','id');
     }
 
-    // public function job()
-    // {
-    //     return $this->belongsTo(Job::class);
-    // }
+    public function post()
+    {
+        return $this->belongsTo(Post::class,'post_id','id');
+    }
 }
