@@ -12,18 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('applications', function (Blueprint $table) {
-
-            // 3 | email in resume - email in profile - email in application
-
             $table->id();
-            $table->bigInteger('job_id');           // temp FK
-            $table->bigInteger('candidate_id');     // temp FK
-            // $table->enum('status', ['applied', 'cancelled']);
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('job_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->string('resume')->nullable();
             $table->enum('status', ['pending', 'accepted', 'rejected'])->default('pending');
-            $table->string('resume')->nullable();           // ok
-            $table->text('contact_details')->nullable();    // phone - etc ...
             $table->timestamps();
-
         });
     }
 

@@ -3,13 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CandidateRequest;
+use App\Http\Requests\UserRequest;
 use App\Http\Resources\CandidateResource;
-use App\Models\Candidate;
+use App\Http\Resources\UserResource;
+use App\Models\User;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
-class CandidateAPIController extends Controller
+class UserAPIController extends Controller
 {
     // public function __construct()
     // {
@@ -21,7 +23,7 @@ class CandidateAPIController extends Controller
      */
     public function index()
     {
-        return CandidateResource::collection(Candidate::paginate(5));
+        return UserResource::collection(User::paginate(5));
     }
 
     /**
@@ -35,17 +37,17 @@ class CandidateAPIController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Candidate $candidate)
+    public function show(User $candidate)
     {
-        return new CandidateResource($candidate);
+        return new UserResource($candidate);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(CandidateRequest $request, Candidate $candidate)
+    public function update(UserRequest $request, User $user)
     {
-        return $candidate;
+        return $user;
         // if ($request->has('password')) {
         //     $password = Hash::make($request->input('password'));
         //     $request->merge(['password' => $password]);
@@ -67,7 +69,7 @@ class CandidateAPIController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Candidate $candidate)
+    public function destroy(User $user)
     {
         //
     }

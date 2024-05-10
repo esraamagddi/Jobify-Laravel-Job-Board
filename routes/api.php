@@ -20,11 +20,11 @@ Route::get('test', function () {
  * /register
  * /login
 */
-Route::post('/candidate/register', 'CandidateController@register');
-Route::post('/candidate/login',    'CandidateController@login');
+Route::post('/user/register', 'UserController@register');
+Route::post('/user/login',    'UserController@login');
 
-Route::middleware('auth:sanctum')->apiResource('candidates',    'CandidateAPIController');
-// Route::apiResource('candidates',    'CandidateAPIController');
+Route::middleware('auth:sanctum')->apiResource('users',    'UserAPIController');
+// Route::apiResource('candidates',    'UserAPIController');
 
 /* Profile
  * 

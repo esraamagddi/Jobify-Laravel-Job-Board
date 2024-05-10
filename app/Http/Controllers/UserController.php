@@ -2,27 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CandidateLoginRequest;
-use App\Http\Requests\CandidateRequest;
-use App\Models\Candidate;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\UserLoginRequest;
+use App\Http\Requests\UserRequest;
+use App\Models\User;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 
-class CandidateController extends Controller
+class UserController extends Controller
 {
     
-    public function login(CandidateLoginRequest $request)
+    public function login(UserLoginRequest $request)
     {
-        $candidate      = Candidate::where('email', $request->email)->first();
-        $candidatePass  = Hash::check($request->password, $candidate->password);
-        $token = $candidate->createToken('token')->plainTextToken;
+        $user      = User::where('email', $request->email)->first();
+        $userPass  = Hash::check($request->password, $user->password);
+        $token = $user->createToken('token')->plainTextToken;
 
-        if ($candidate && $candidatePass) {
+        if ($user && $userPass) {
             return response()->json([
                 'Message' => 'Login Success',
-                'candidate' => $candidate,
+                'user' => $user,
                 'Token' => $token
             ], Response::HTTP_OK);
         }
@@ -32,18 +30,18 @@ class CandidateController extends Controller
         ], Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
-    public function register(CandidateRequest $request)
+    public function register(UserRequest $request)
     {
 
         $password = Hash::make($request->input('password'));
         $request->merge(['password' => $password]);
-        $candidate = Candidate::create($request->all());
-        $token = $candidate->createToken('token')->plainTextToken;
+        $user = User::create($request->all());
+        $token = $user->createToken('token')->plainTextToken;
 
-        if ($candidate)
+        if ($user)
             return response()->json([
                 'Message' => 'Registered Successefully',
-                'candidate' => $candidate,
+                'user' => $user,
                 'Token' => $token
             ], Response::HTTP_OK);
 
