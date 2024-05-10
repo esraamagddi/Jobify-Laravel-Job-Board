@@ -22,7 +22,7 @@ class CandidateLoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|email:rfc,dns|exists:users',
+            'email' => 'required|email:rfc,dns|exists:candidates',
             'password' => 'required',
         ];
     }

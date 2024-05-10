@@ -23,8 +23,13 @@ class CandidateRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'email' => 'required|unique:users|email:rfc,dns',
+            'email' => 'required|unique:candidates|email:rfc,dns',
             'password' => 'required|confirmed|min:8',
         ];
     }
+
+    // protected function failedValidation(Validator $validator)
+    // {
+    //     throw new HttpResponseException(response()->json($validator->errors(), 422));
+    // }
 }

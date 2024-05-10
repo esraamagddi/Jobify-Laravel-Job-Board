@@ -12,14 +12,19 @@ Route::get('test', function () {
 });
 
 
+// Manage their profile information and applications.// cancel apply
+
+
 /* Auth
  * 
  * /register
  * /login
 */
-Route::post('register', 'UserAPIController@register');
-Route::post('login',    'UserAPIController@login');
- 
+Route::post('/candidate/register', 'CandidateController@register');
+Route::post('/candidate/login',    'CandidateController@login');
+
+Route::middleware('auth:sanctum')->apiResource('candidates',    'CandidateAPIController');
+// Route::apiResource('candidates',    'CandidateAPIController');
 
 /* Profile
  * 
