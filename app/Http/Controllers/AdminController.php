@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Admin;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Resources\AdminResource;
 
@@ -13,7 +13,7 @@ class AdminController extends Controller
     public function index()
     {
         //
-        return AdminResource::collection(Admin::paginate(5));    
+        return AdminResource::collection(User::paginate(5));    
     }
 
     /**
@@ -28,7 +28,7 @@ class AdminController extends Controller
         ]);
 
         // Create a new Admin instance
-        $admin = Admin::create([
+        $admin = User::create([
             'name' => $validatedData['name'],
             'email' => $validatedData['email'],
             'password' => bcrypt($validatedData['password']), 
@@ -43,7 +43,7 @@ class AdminController extends Controller
      */
     public function show(string $id)
     {
-        $admin = Admin::findOrFail($id);
+        $admin = User::findOrFail($id);
         
         return new AdminResource($admin);
     }
@@ -59,7 +59,7 @@ class AdminController extends Controller
             'password' => 'sometimes|string|min:8',
         ]);
     
-        $admin = Admin::findOrFail($id);
+        $admin = User::findOrFail($id);
     
         $admin->name = $validatedData['name'];
         $admin->email = $validatedData['email'];
@@ -79,7 +79,7 @@ class AdminController extends Controller
      */
     public function destroy(string $id)
     {
-        $admin = Admin::findOrFail($id);
+        $admin = User::findOrFail($id);
         $admin->delete();
         return response()->json(['message' => 'Admin deleted successfully']);
     }
