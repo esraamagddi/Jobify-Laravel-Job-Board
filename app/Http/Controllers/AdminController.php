@@ -2,75 +2,93 @@
 
 namespace App\Http\Controllers;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use App\Http\Resources\AdminResource;
+use App\Http\Resources\UserResource;
+use App\Http\Requests\StoreAdminRequest;
+use App\Http\Requests\UpdateAdminRequest;
+use App\Http\Exceptions\Handler;
+use App\Http\Helpers\UploadImages;
+use Exception;
+
+
 
 class AdminController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    private $uploader;
+    private $handler;
+
+    public function __construct(Handler $handler)
+    {
+        $this->handler = $handler;
+        $this->uploader = new UploadImages();
+    }
+
     public function index()
     {
         //
-        return AdminResource::collection(User::paginate(5));    
+        return UserResource::collection(User::paginate(5));    
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function register(Request $request)
-    {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:admins',
-            'password' => 'required|string|min:8',
-        ]);
+        public function store(StoreAdminRequest $request)
+        {
 
-        // Create a new Admin instance
-        $admin = User::create([
-            'name' => $validatedData['name'],
-            'email' => $validatedData['email'],
-            'password' => bcrypt($validatedData['password']), 
-        ]);
+            try{
+                // dd($request->role);
+            
+            $admin = User::create([
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'password' => bcrypt($request->password),
+                    'role'=>$request->role,
+                    'profile_photo_path'=>$this->uploader->file_operations($request,'image','admins'),
+                ]);
+                return new UserResource($admin);
+            }
+            catch (Exception $e) {
+                return $this->handler->render($request, $e);
+            }
+        }
 
-        return response()->json(['message' => 'Admin created successfully', 'admin' => $admin], 201);
-    }
+    
 
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request,User $admin)
     {
-        $admin = User::findOrFail($id);
-        
-        return new AdminResource($admin);
+            return new UserResource($admin);
     }
+
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    
+ public function update(UpdateAdminRequest $request, $id)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:admins,email,' . $id,
-            'password' => 'sometimes|string|min:8',
-        ]);
-    
-        $admin = User::findOrFail($id);
-    
-        $admin->name = $validatedData['name'];
-        $admin->email = $validatedData['email'];
-    
-        if ($request->has('password')) {
-            $admin->password = bcrypt($validatedData['password']);
+        try {
+            $admin = User::findOrFail($id);
+        
+            $admin->name = $request->input('name');
+            $admin->email = $request->input('email');
+            $admin->role = $request->input('role');
+
+            if ($request->has('password')) {
+               $admin->password = bcrypt($request->input('password'));
+           }
+        
+         $admin->save();
+        
+        return response()->json(['message' => 'Admin updated successfully', 'admin' => new UserResource($admin)], 200);
+         } 
+        catch (Exception $e) {
+            return response()->json(['error' => 'Admin not found'], 404);
         }
-    
-        $admin->save();
-    
-        return response()->json(['message' => 'Admin updated successfully', 'admin' => new AdminResource($admin)]);
     }
     
 
@@ -79,8 +97,9 @@ class AdminController extends Controller
      */
     public function destroy(string $id)
     {
-        $admin = User::findOrFail($id);
-        $admin->delete();
-        return response()->json(['message' => 'Admin deleted successfully']);
+
+            $admin = User::findOrFail($id);
+            $admin->delete();
+            return response()->json(['message' => 'Admin deleted successfully']);   
     }
 }
