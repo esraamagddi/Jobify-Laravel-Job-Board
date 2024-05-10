@@ -17,4 +17,8 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+<<<<<<< HEAD
 .env.example
+=======
+public/images/
+>>>>>>> origin/employers
