@@ -9,6 +9,8 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Application;
+
 class User extends Authenticatable
 {
     use HasApiTokens;
@@ -27,6 +29,11 @@ class User extends Authenticatable
         'email',
         'password',
     ];
+
+    public function applications()
+    {
+        return $this->hasMany(Application::class);
+    }
 
     /**
      * The attributes that should be hidden for serialization.

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-use App\Models\Candidate;
+use App\Models\User;
 use App\Models\Post;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -23,9 +23,9 @@ class Application extends Model implements HasMedia
         'status',
     ];
 
-    public function candidate()
+    public function user()
     {
-        return $this->belongsTo(Candidate::class,'candidate_id','id');
+        return $this->belongsTo(User::class,'user_id','id');
     }
 
     public function post()
