@@ -20,6 +20,8 @@ Route::get('test', function () {
  * /register
  * /login
 */
+    
+// for candidate
 Route::post('/user/register', 'UserController@register');
 Route::post('/user/login',    'UserController@login');
 
