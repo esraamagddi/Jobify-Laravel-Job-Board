@@ -16,8 +16,12 @@ class StoreAdminRequest extends FormRequest
      */
     public function authorize()
     {
-        // Assuming you have an isAdmin method in your User model
-        // return $this->user->role == 'admin';
+        // if (auth()->check()) {
+        //     $user = auth()->user();
+    
+        //     if ($user->role === 'admin') {
+        //         return true;
+        //     }
         return true;
     }
 

@@ -9,6 +9,7 @@ use App\Http\Requests\StoreAdminRequest;
 use App\Http\Requests\UpdateAdminRequest;
 use App\Http\Exceptions\Handler;
 use App\Http\Helpers\UploadImages;
+use App\Http\Helpers\CheckAdmin;
 use Exception;
 
 
@@ -17,16 +18,21 @@ class AdminController extends Controller
 {
     private $uploader;
     private $handler;
+    private $checker;
+
 
     public function __construct(Handler $handler)
     {
         $this->handler = $handler;
         $this->uploader = new UploadImages();
+        $this->checker = new CheckAdmin();
+
     }
 
     public function index()
     {
         //
+
         return UserResource::collection(User::paginate(5));    
     }
 
@@ -35,17 +41,15 @@ class AdminController extends Controller
      */
         public function store(StoreAdminRequest $request)
         {
-
-            try{
-                // dd($request->role);
             
-            $admin = User::create([
-                    'name' => $request->name,
-                    'email' => $request->email,
-                    'password' => bcrypt($request->password),
-                    'role'=>$request->role,
-                    'profile_photo_path'=>$this->uploader->file_operations($request,'image','admins'),
-                ]);
+            try{
+                $file_path = $this->uploader->file_operations($request);
+                $request_parms['profile_photo_path'] = $file_path;
+                $request_parms['name'] = $request->name;
+                $request_parms['email'] = $request->email;
+                $request_parms['password'] = bcrypt($request->password);
+                $request_parms['role'] = $request->role;
+                $admin = User::create($request_parms);
                 return new UserResource($admin);
             }
             catch (Exception $e) {
@@ -59,10 +63,21 @@ class AdminController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request,User $admin)
+    public function show(Request $request, User $admin)
     {
+
+        $isAdmin= $this->checker->isAdmin($admin);
+        
+        if (!$isAdmin){
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+        else 
+        {
             return new UserResource($admin);
+        }
     }
+    
+    
 
 
     /**

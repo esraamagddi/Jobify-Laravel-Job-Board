@@ -16,8 +16,13 @@ class UpdateAdminRequest extends FormRequest
      */
     public function authorize()
     {
-        // return $this->user->role == 'admin';
-        return true;
+       // if (auth()->check()) {
+        //     $user = auth()->user();
+    
+        //     if ($user->role === 'admin') {
+        //         return true;
+        //     }
+                return true;
     }
 
     /**
