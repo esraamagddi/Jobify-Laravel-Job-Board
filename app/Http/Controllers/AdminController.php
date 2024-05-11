@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\User;
+use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
@@ -14,9 +15,6 @@ use App\Http\Helpers\CheckAdmin;
 use Exception;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Route; // Add this line
-
-
-
 
 
 class AdminController extends Controller
@@ -46,6 +44,7 @@ class AdminController extends Controller
      */
         public function store(StoreAdminRequest $request)
         {
+            // dd($request);
             if ($request->role == 'admin'){
                 $isAdmin= $this->checker->isAdmin(Auth::user());
                 if (!$isAdmin){
@@ -53,7 +52,6 @@ class AdminController extends Controller
                 }
             }
     
-            
             try{
                 $file_path = $this->uploader->file_operations($request);
                 $request_params['profile_photo_path'] = $file_path;
@@ -75,16 +73,23 @@ class AdminController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request, User $admin)
+    public function show(Request $request,string $id)
     {
-        if ($admin->role == 'admin'){
-            $isAdmin= $this->checker->isAdmin(Auth::user());
-            if (!$isAdmin){
-                return response()->json(['error' => 'Unauthorized'], 401);
+        try{
+            //
+            $admin = User::find($id);
+            if ($admin->role == 'admin'){
+                $isAdmin= $this->checker->isAdmin(Auth::user());
+                if (!$isAdmin){
+                    return response()->json(['error' => 'Unauthorized'], 401);
+                }
             }
-        }
-   
             return new UserResource($admin);
+
+        }
+        catch (Exception $e) {
+            return response()->json(['error' => 'Admin not found'], 404);
+        }
         
     }
     
@@ -133,7 +138,7 @@ class AdminController extends Controller
     public function destroy(string $id)
     {
         $admin = User::findOrFail($id);
-    
+
         if ($admin->role == 'admin') {
             $isAdmin = $this->checker->isAdmin(Auth::user());
             if (!$isAdmin) {
@@ -150,6 +155,15 @@ class AdminController extends Controller
         return response()->json(['message' => 'Admin deleted successfully']); 
     }
 
-    
+    public function updatePostStatus(Request $request, $id)
+    {
+        $jobPosting = Post::findOrFail($id);
+
+        $jobPosting->approved = !($jobPosting->approved) ;
+        $jobPosting->save();
+
+        return response()->json(['message' => 'Updated Successfully', 'job_posting' => $jobPosting]);
+    }
+
 }
 
