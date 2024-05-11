@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Application;
-
 use Illuminate\Http\Request;
 use App\Http\Resources\ApplicationResource;
 use Illuminate\Support\Facades\Validator;
@@ -15,7 +14,7 @@ class ApplicationController extends Controller
      */
     public function index()
     {
-        $applications = Application::all();
+        $applications = Application::paginate(10);
 
         return ApplicationResource::collection($applications);
     }
@@ -26,8 +25,8 @@ class ApplicationController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'candidate_id' => 'required|integer',
-            // 'job_id' => 'required|integer',
+            'user_id' => 'required|integer',
+            'post_id' => 'required|integer',
             'resume' => 'required|file|mimes:pdf|max:2048',
             'contact_details' => 'nullable|string',
         ]);
@@ -41,8 +40,8 @@ class ApplicationController extends Controller
         $path = $file->store('resumes', 'public');
 
         $application = Application::create([
-            'candidate_id' => $request->candidate_id,
-            'applicable_id' => $request->job_id,
+            'user_id' => $request->user_id,
+            'post_id' => $request->post_id,
             'resume' => $path,
             'contact_details' => $request->contact_details,
         ]);
@@ -73,7 +72,8 @@ class ApplicationController extends Controller
     public function update(Request $request, string $id)
     {
         $validator = Validator::make($request->all(), [
-            'candidate_id' => 'required|integer',
+            'user_id' => 'required|integer',
+            'post_id' => 'required|integer',
             'resume' => 'file|mimes:pdf|max:2048',
             'contact_details' => 'nullable|string',
         ]);
@@ -101,7 +101,8 @@ class ApplicationController extends Controller
         }
 
         $application->update([
-            'candidate_id' => $request->candidate_id,
+            'user_id' => $request->user_id,
+            'post_id' => $request->post_id,
             'resume' => $filePath,
             'contact_details' => $request->contact_details,
         ]);

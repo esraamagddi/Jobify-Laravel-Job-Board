@@ -16,7 +16,7 @@ class Application extends Model implements HasMedia
     use HasFactory;
 
     protected $fillable = [
-        'candidate_id',
+        'user_id',
         'post_id',
         'resume',
         'contact_details',
