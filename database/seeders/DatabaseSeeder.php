@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Application;
 use App\Models\Candidate;
+use App\Models\Category;
 use App\Models\Job;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -16,9 +17,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        Candidate::factory(5)->create();
-        Job::factory(5)->create();
-        Application::factory(5)->create();
+        // User::factory(5)->create();
+        
+        $this->call([
+            CategorySeeder::class,
+            JobSeeder::class,
+            ApplicationSeeder::class
+        ]);
         
         // User::factory(10)->create();
         // User::factory()->create([

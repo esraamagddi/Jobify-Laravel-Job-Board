@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,10 +17,12 @@ class ApplicationFactory extends Factory
      */
     public function definition(): array
     {
+        $usersIds = User::pluck('id');
+        $jobsIds = User::pluck('id');
         return [
-            'job_id' => fake()->randomNumber(),
-            'candidate_id' => fake()->randomNumber(),
-            'status' => fake()->randomElement(['applied', 'cancelled']),
+            'job_id' => fake()->randomElement($jobsIds),
+            'user_id' => fake()->randomElement($usersIds),
+            'status' => 'pending' //fake()->randomElement(['pending', 'accepted', 'rejected']),
         ];
     }
 }

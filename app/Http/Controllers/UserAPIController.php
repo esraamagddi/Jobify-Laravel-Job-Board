@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UserRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Response;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class UserAPIController extends Controller
