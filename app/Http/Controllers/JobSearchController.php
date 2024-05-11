@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 use App\Models\Post;
 use App\Models\Category;
@@ -11,6 +12,24 @@ class JobSearchController extends Controller
 {
     public function search(Request $request)
     {
+        $rules = [
+            'keywords' => 'nullable|string',
+            'location' => 'nullable|string',
+            'category' => 'nullable|exists:categories,id',
+            'experience_level' => 'nullable|string',
+            'salary_range' => 'nullable|string',
+            'work_type' => 'nullable|in:offline,remote,hybrid',
+            'deadline' => 'nullable|date_format:Y-m-d',
+            'employer_name' => 'nullable|string',
+        ];
+
+
+        $validator = Validator::make($request->all(), $rules);
+        
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
         $query = Post::query();
 
         if ($request->filled('keywords')) {
@@ -55,7 +74,7 @@ class JobSearchController extends Controller
          }
 
 
-        $jobs = $query->with('category')->paginate(10);  
+        $jobs = $query->with('category')->paginate(10);
 
         return response()->json($jobs);
     }
