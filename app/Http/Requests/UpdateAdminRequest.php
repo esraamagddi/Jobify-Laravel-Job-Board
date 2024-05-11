@@ -34,7 +34,7 @@ class UpdateAdminRequest extends FormRequest
     {
         return [
             'name' => 'sometimes|string|max:255',
-            'email' => 'sometimes|string|email|max:255|unique:admins,email,' . $this->user->id,
+            'email' => 'sometimes|string|email|max:255|unique:admins,email,' . auth()->user()->id,
             'password' => 'sometimes|string|max:16|min:8|regex:/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-={}[\]:;"\'<>,.?\/]).{8,}$/',
         ];
     }

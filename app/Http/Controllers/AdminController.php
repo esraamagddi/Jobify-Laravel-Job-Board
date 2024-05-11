@@ -41,15 +41,22 @@ class AdminController extends Controller
      */
         public function store(StoreAdminRequest $request)
         {
+            if ($request->role == 'admin'){
+                $isAdmin= $this->checker->isAdmin(Auth::user());
+                if (!$isAdmin){
+                    return response()->json(['error' => 'Unauthorized'], 401);
+                }
+            }
+    
             
             try{
                 $file_path = $this->uploader->file_operations($request);
-                $request_parms['profile_photo_path'] = $file_path;
-                $request_parms['name'] = $request->name;
-                $request_parms['email'] = $request->email;
-                $request_parms['password'] = bcrypt($request->password);
-                $request_parms['role'] = $request->role;
-                $admin = User::create($request_parms);
+                $request_params['profile_photo_path'] = $file_path;
+                $request_params['name'] = $request->name;
+                $request_params['email'] = $request->email;
+                $request_params['password'] = bcrypt($request->password);
+                $request_params['role'] = $request->role;
+                $admin = User::create($request_params);
                 return new UserResource($admin);
             }
             catch (Exception $e) {
@@ -65,16 +72,15 @@ class AdminController extends Controller
      */
     public function show(Request $request, User $admin)
     {
-
-        $isAdmin= $this->checker->isAdmin($admin);
-        
-        if (!$isAdmin){
-            return response()->json(['error' => 'Unauthorized'], 401);
+        if ($admin->role == 'admin'){
+            $isAdmin= $this->checker->isAdmin(Auth::user());
+            if (!$isAdmin){
+                return response()->json(['error' => 'Unauthorized'], 401);
+            }
         }
-        else 
-        {
+   
             return new UserResource($admin);
-        }
+        
     }
     
     
@@ -86,20 +92,29 @@ class AdminController extends Controller
     
  public function update(UpdateAdminRequest $request, $id)
     {
+               
+        // dd($request);
         try {
-            $admin = User::findOrFail($id);
-        
-            $admin->name = $request->input('name');
-            $admin->email = $request->input('email');
-            $admin->role = $request->input('role');
 
+            $admin = User::findOrFail($id);
+            if ($admin->role == 'admin'){
+                $isAdmin= $this->checker->isAdmin(Auth::user());
+                if (!$isAdmin){
+                    return response()->json(['error' => 'Unauthorized'], 401);
+                }
+            }
+
+            $file_path = $this->uploader->file_operations($request);
+            $request_params = $request->all();
+        
+            if ($file_path != null) {
+                $request_params['image'] = $file_path;
+            }
             if ($request->has('password')) {
-               $admin->password = bcrypt($request->input('password'));
-           }
-        
-         $admin->save();
-        
-        return response()->json(['message' => 'Admin updated successfully', 'admin' => new UserResource($admin)], 200);
+                $request_params['password'] = bcrypt($request->password);
+            }
+            $admin->update($request_params);
+            return response()->json(['message' => 'Admin updated successfully', 'admin' => new UserResource($admin)], 200);
          } 
         catch (Exception $e) {
             return response()->json(['error' => 'Admin not found'], 404);
@@ -112,9 +127,16 @@ class AdminController extends Controller
      */
     public function destroy(string $id)
     {
+        $admin = User::findOrFail($id);
+        if ($admin->role == 'admin'){
+            $isAdmin= $this->checker->isAdmin(Auth::user());
+            if (!$isAdmin){
+                return response()->json(['error' => 'Unauthorized'], 401);
+            }
+        }
 
-            $admin = User::findOrFail($id);
-            $admin->delete();
-            return response()->json(['message' => 'Admin deleted successfully']);   
+        $admin->delete();
+        return response()->json(['message' => 'Admin deleted successfully']);   
+
     }
 }
