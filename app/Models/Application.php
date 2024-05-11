@@ -21,6 +21,8 @@ class Application extends Model implements HasMedia
         'resume',
         'contact_details',
         'status',
+        'app_email',
+        'app_phone',
     ];
 
     public function user()

@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('resume')->nullable();
             $table->text('contact_details')->nullable();
             $table->enum('status', ['pending', 'accepted', 'rejected'])->default('pending');
+            $table->string('app_email')->unique();
+            $table->string('app_phone')->unique();
             $table->timestamps();
 
 

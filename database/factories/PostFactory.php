@@ -23,7 +23,7 @@ class PostFactory extends Factory
 
         return [
             'title' => fake()->sentence,
-            'description' => fake()->paragraph,
+            'description' => fake()->sentence,
             'responsibilities' => fake()->text,
             'skills' => fake()->text,
             'qualifications' => fake()->text,

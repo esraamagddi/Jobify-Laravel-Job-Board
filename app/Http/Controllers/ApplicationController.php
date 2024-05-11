@@ -29,6 +29,8 @@ class ApplicationController extends Controller
             'post_id' => 'required|integer',
             'resume' => 'required|file|mimes:pdf|max:2048',
             'contact_details' => 'nullable|string',
+            'app_email' => 'required|email',
+            'app_phone' => 'required|string',
         ]);
 
 
@@ -44,6 +46,8 @@ class ApplicationController extends Controller
             'post_id' => $request->post_id,
             'resume' => $path,
             'contact_details' => $request->contact_details,
+            'app_email' => $request->app_email,
+            'app_phone' => $request->app_phone,
         ]);
 
         return new ApplicationResource($application);
@@ -76,6 +80,10 @@ class ApplicationController extends Controller
             'post_id' => 'required|integer',
             'resume' => 'file|mimes:pdf|max:2048',
             'contact_details' => 'nullable|string',
+            'app_email' => 'required|email',
+            'app_phone' => 'required|string',
+
+
         ]);
 
         if ($validator->fails()) {
@@ -105,6 +113,8 @@ class ApplicationController extends Controller
             'post_id' => $request->post_id,
             'resume' => $filePath,
             'contact_details' => $request->contact_details,
+            'app_email' => $request->app_email,
+            'app_phone' => $request->app_phone,
         ]);
 
         return new ApplicationResource($application);
