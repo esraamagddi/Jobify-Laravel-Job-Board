@@ -34,7 +34,7 @@ class EmployerController extends Controller
     {
         try{
             $new_employer = $request->all();
-            $new_employer['logo'] = $this->uploader->file_operations($request,'logo');
+            $new_employer['logo'] = $this->uploader->file_operations($request,'logo','employers');
             $employer = Employer::create($new_employer);
             $employer->save();
             return new EmployerResource($employer);
