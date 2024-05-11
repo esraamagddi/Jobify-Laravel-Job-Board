@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Http\Resources\UserResource;
 use App\Http\Requests\StoreAdminRequest;
@@ -12,7 +13,8 @@ use App\Http\Helpers\UploadImages;
 use App\Http\Helpers\CheckAdmin;
 use Exception;
 use Illuminate\Support\Facades\Storage;
-use App\Events\ImageDeleted;
+use Illuminate\Support\Facades\Route; // Add this line
+
 
 
 
@@ -23,13 +25,13 @@ class AdminController extends Controller
     private $handler;
     private $checker;
 
-
     public function __construct(Handler $handler)
-    {
+    {        
+        // $this->middleware('auth:sanctum');
         $this->handler = $handler;
         $this->uploader = new UploadImages();
         $this->checker = new CheckAdmin();
-
+        // $this->middleware('auth:santcum')->only('update','destroy');
     }
 
     public function index()
@@ -147,5 +149,7 @@ class AdminController extends Controller
         $admin->delete();
         return response()->json(['message' => 'Admin deleted successfully']); 
     }
+
+    
 }
 
