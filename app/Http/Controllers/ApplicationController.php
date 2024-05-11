@@ -6,6 +6,7 @@ use App\Models\Application;
 use Illuminate\Http\Request;
 use App\Http\Resources\ApplicationResource;
 use Illuminate\Support\Facades\Validator;
+use App\Events\AppNotificationEvent;
 
 class ApplicationController extends Controller
 {
@@ -49,6 +50,8 @@ class ApplicationController extends Controller
             'app_email' => $request->app_email,
             'app_phone' => $request->app_phone,
         ]);
+
+        event(new AppNotificationEvent('New application created: ' . $application->id));
 
         return new ApplicationResource($application);
     }
@@ -116,6 +119,8 @@ class ApplicationController extends Controller
             'app_email' => $request->app_email,
             'app_phone' => $request->app_phone,
         ]);
+
+        event(new AppNotificationEvent('New application created: ' . $application->id));
 
         return new ApplicationResource($application);
     }
