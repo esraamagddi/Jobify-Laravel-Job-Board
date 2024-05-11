@@ -5,6 +5,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\QueryException;
 use Throwable;
 
 class Handler extends ExceptionHandler{
@@ -24,6 +25,9 @@ class Handler extends ExceptionHandler{
 
         if ($exception instanceof AuthenticationException) {
             $exception = $this->unauthenticated($request, $exception);
+        }
+        if ($exception instanceof QueryException ) {
+            return response()->json(["message"=>'Sql Query Exception', 'data'=>$exception->errorInfo[2]],500);
         }
 
         if ($exception instanceof ValidationException) {

@@ -56,13 +56,13 @@ return [
             'throw' => false,
         ],
         
-        'employers'=> [
+        'users'=> [
             'driver' => 'local',
-            'root' => public_path('images/employers'),
+            'root' => public_path('images/users'),
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
             'throw' => false,
-        ]
+        ],
 
     ],
 
