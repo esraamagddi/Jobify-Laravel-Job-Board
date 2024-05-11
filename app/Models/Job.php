@@ -11,4 +11,14 @@ class Job extends Model
 
     protected $guarded = [];
 
+    public function category()
+    {
+        return $this->belongsTo('App\Models\Category');
+    }
+
+     // many-to-many
+     public function candidates()
+     {
+         return $this->belongsToMany('App\Models\User', 'applications');
+     }
 }

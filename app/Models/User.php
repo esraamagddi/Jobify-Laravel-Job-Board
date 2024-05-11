@@ -68,4 +68,16 @@ class User extends Authenticatable
     {
         return $this->hasOne('App\Models\Profile');
     }
+
+    // one-to-many
+    public function jobs()
+    {
+        return $this->hasMany('App\Models\Job');
+    }
+    
+    // many-to-many
+    public function applications()
+    {
+        return $this->belongsToMany('App\Models\Job', 'applications')->withPivot(['user_id', 'job_id', 'resume', 'status']);
+    }
 }

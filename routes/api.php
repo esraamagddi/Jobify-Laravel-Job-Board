@@ -14,16 +14,12 @@ Route::get('test', function () {
 
 // Manage their profile information and applications.// cancel apply
 
-
-/* Auth
- * 
- * /register
- * /login
-*/
-    
+  
 // for candidate
 Route::post('/user/register', 'UserController@register');
 Route::post('/user/login',    'UserController@login');
+Route::middleware('auth:sanctum')->post('/candidate/application', 'ApplicationController@change');
+Route::middleware('auth:sanctum')->get('/candidate/application', 'ApplicationController@list');
 
 Route::middleware('auth:sanctum')->apiResource('users',    'UserAPIController');
 Route::middleware('auth:sanctum')->apiResource('profiles',    'ProfileController');
