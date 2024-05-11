@@ -11,6 +11,9 @@ use App\Http\Exceptions\Handler;
 use App\Http\Helpers\UploadImages;
 use App\Http\Helpers\CheckAdmin;
 use Exception;
+use Illuminate\Support\Facades\Storage;
+use App\Events\ImageDeleted;
+
 
 
 
@@ -41,12 +44,12 @@ class AdminController extends Controller
      */
         public function store(StoreAdminRequest $request)
         {
-            if ($request->role == 'admin'){
-                $isAdmin= $this->checker->isAdmin(Auth::user());
-                if (!$isAdmin){
-                    return response()->json(['error' => 'Unauthorized'], 401);
-                }
-            }
+            // if ($request->role == 'admin'){
+            //     $isAdmin= $this->checker->isAdmin(Auth::user());
+            //     if (!$isAdmin){
+            //         return response()->json(['error' => 'Unauthorized'], 401);
+            //     }
+            // }
     
             
             try{
@@ -128,15 +131,21 @@ class AdminController extends Controller
     public function destroy(string $id)
     {
         $admin = User::findOrFail($id);
-        if ($admin->role == 'admin'){
-            $isAdmin= $this->checker->isAdmin(Auth::user());
-            if (!$isAdmin){
-                return response()->json(['error' => 'Unauthorized'], 401);
-            }
+    
+        // if ($admin->role == 'admin') {
+        //     $isAdmin = $this->checker->isAdmin(Auth::user());
+        //     if (!$isAdmin) {
+        //         return response()->json(['error' => 'Unauthorized'], 401);
+        //     }
+        // }
+    
+        if ($admin->profile_photo_path != null) {
+            unlink(public_path('images/users/' . $admin->profile_photo_path));
+            Storage::delete($admin->profile_photo_path);
         }
-
+        
         $admin->delete();
-        return response()->json(['message' => 'Admin deleted successfully']);   
-
+        return response()->json(['message' => 'Admin deleted successfully']); 
     }
 }
+
