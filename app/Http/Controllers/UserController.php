@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UserLoginRequest;
 use App\Http\Requests\UserRequest;
+use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
@@ -18,11 +19,14 @@ class UserController extends Controller
         if ($user) {
             $userPass  = Hash::check($request->password, $user->password);
             $token = $user->createToken('token')->plainTextToken;
+            $profile = Profile::where('user_id',$user->id)->first();
+
             if ($user && $userPass) {
                 return response()->json([
                     'Message' => 'Login Success',
                     'user' => $user,
-                    'Token' => $token
+                    'Token' => $token,
+                    'Profile' => $profile
                 ], Response::HTTP_OK);
             }
         } 

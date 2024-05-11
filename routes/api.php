@@ -26,6 +26,7 @@ Route::post('/user/register', 'UserController@register');
 Route::post('/user/login',    'UserController@login');
 
 Route::middleware('auth:sanctum')->apiResource('users',    'UserAPIController');
+Route::middleware('auth:sanctum')->apiResource('profiles',    'ProfileController');
 // Route::apiResource('candidates',    'UserAPIController');
 
 /* Profile
