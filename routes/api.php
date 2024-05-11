@@ -12,12 +12,6 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::apiResource('employers',EmployerController::class);
-
-Route::apiResource('posts',PostController::class);
-
-Route::apiResource('categories', CategoryController::class);
-
 Route::get('/jobs/search', [JobSearchController::class, 'search']);
   //   ->middleware('auth:sanctum');
 
