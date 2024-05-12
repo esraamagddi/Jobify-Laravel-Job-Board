@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StoreEmployerRequest;
 use App\Http\Resources\EmployerResource;
 use App\Http\Helpers\UploadImages;
+use App\Models\User;
+use Illuminate\Contracts\Container\Container;
 use Exception;
 
 class EmployerController extends Controller
@@ -33,9 +35,12 @@ class EmployerController extends Controller
     public function store(StoreEmployerRequest $request)
     {
         try{
-            $new_employer = $request->all();
-            $new_employer['logo'] = $this->uploader->file_operations($request,'logo','employers');
-            $employer = Employer::create($new_employer);
+            $user_data = $request->only(['name', 'email', 'password', 'role', 'image']);
+            $user = User::create($user_data);
+            $user->save();
+            $employer_data = $request->only(['industry', 'branches', 'branding_elements']);
+            $employer_data['user_id'] = $user->id; 
+            $employer = Employer::create($employer_data);
             $employer->save();
             return new EmployerResource($employer);
         } catch (Exception $e) {

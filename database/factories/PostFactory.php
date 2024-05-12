@@ -3,7 +3,7 @@
 namespace Database\Factories;
 use App\Models\Employer;
 use App\Models\Category;
-
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,7 +18,7 @@ class PostFactory extends Factory
      */
     public function definition(): array
     {
-        $employer = Employer::factory()->create();
+        $user = User::factory()->create();
         $category = Category::factory()->create();
 
         return [
@@ -31,7 +31,7 @@ class PostFactory extends Factory
             'work_type' => fake()->randomElement(['offline', 'remote', 'hybrid']),
             'location' => fake()->address,
             'deadline' => fake()->date(),
-            'employer_id' => $employer->id,
+            'employer_id' => $user->id,
             'category_id' => $category->id,
         ];
     }

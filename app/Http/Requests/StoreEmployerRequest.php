@@ -10,11 +10,11 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 class StoreEmployerRequest extends FormRequest
 {
     /**
-     * DeterSymfony\\Component\\HttpKernel\\Exception\\NotFoundHttpExceptionmine if the user is authorized to make this request.
+     * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -55,7 +55,7 @@ class StoreEmployerRequest extends FormRequest
     {
             $errors = (new ValidationException($validator))->errors();
             throw new HttpResponseException(
-                response()->json(['data' => $errors], 422)
+                response()->json(['message'=>'Validation error','data' => $errors], 422)
             );
     }
 }
