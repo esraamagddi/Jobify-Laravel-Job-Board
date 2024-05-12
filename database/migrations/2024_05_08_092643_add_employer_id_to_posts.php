@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('posts', function (Blueprint $table) {
             $table->foreignId('employer_id')->constrained(
-                table: 'employers', indexName: 'posts_employer_id'
+                table: 'users', indexName: 'posts_employer_id'
             )->onUpdate('cascade')
             ->onDelete('cascade');
         });

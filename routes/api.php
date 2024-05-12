@@ -19,9 +19,8 @@ Route::get('test', function () {
 });
 
 
-// Manage their profile information and applications.// cancel apply
 
-  
+
 // for candidate
 Route::post('/user/register', 'UserController@register');
 Route::post('/user/login',    'UserController@login');
@@ -33,9 +32,12 @@ Route::middleware('auth:sanctum')->apiResource('profiles',    'ProfileController
 // Route::apiResource('candidates',    'UserAPIController');
 
 /* Profile
- * 
+* 
  * /account
  * /account/update
+ * 
+ * 
+ *
 */
 
 // ------------------------------------------------

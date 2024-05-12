@@ -33,11 +33,6 @@ class User extends Authenticatable
         'profile_photo_path'
     ];
 
-    // public function applications()
-    // {
-    //     return $this->hasMany(Application::class);
-    // }
-
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -89,4 +84,10 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('App\Models\Job', 'applications')->withPivot(['user_id', 'job_id', 'resume', 'status']);
     }
+
+     // public function applications()
+    // {
+    //     return $this->hasMany(Application::class);
+    // }
+    
 }
