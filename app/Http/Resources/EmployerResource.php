@@ -16,10 +16,13 @@ class EmployerResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'email' => $this->email,
+            'name' => $this->user->name,
+            'email' => $this->user->email,
             'industry' => $this->industry,
-            'logo' => $this->logo,
+            'image' => $this->user->profile_photo_path,
+            'avatar'=>$this->user->profile_photo_url ?? 'N/A',
+            'branches'=>$this->branches,
+            'branding_elements'=> $this->branding_elements,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
