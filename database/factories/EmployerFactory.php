@@ -1,0 +1,27 @@
+<?php
+
+namespace Database\Factories;
+
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Employer>
+ */
+class EmployerFactory extends Factory
+{
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition(): array
+    {
+        return [
+            'name' => fake()->name(),
+            'email' => fake()->unique()->safeEmail(),
+            'industry' => $this->faker->randomElement(['Technology', 'Finance', 'Healthcare', 'Education', 'Hospitality']),
+            'password' => bcrypt('password'), // You might want to change this to generate a secure password
+
+        ];
+    }
+}

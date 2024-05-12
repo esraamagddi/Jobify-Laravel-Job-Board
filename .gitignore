@@ -3,6 +3,8 @@
 /public/build
 /public/hot
 /public/storage
+/public/resumes
+
 /storage/*.key
 /vendor
 .env
@@ -17,3 +19,8 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+<<<<<<< HEAD
+.env.example
+=======
+public/images/
+>>>>>>> origin/employers
