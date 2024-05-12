@@ -7,9 +7,18 @@ use Illuminate\Http\Request;
 use App\Http\Resources\ApplicationResource;
 use Illuminate\Support\Facades\Validator;
 use App\Events\AppNotificationEvent;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
+use Closure;
 
-class ApplicationController extends Controller
+class ApplicationController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            'auth:sanctum',
+        ];
+    }
     /**
      * Display a listing of the resource.
      */
