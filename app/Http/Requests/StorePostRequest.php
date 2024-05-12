@@ -9,11 +9,6 @@ class StorePostRequest extends FormRequest
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize(): bool
-    {
-        return true;
-    }
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -31,7 +26,6 @@ class StorePostRequest extends FormRequest
             'work_type' => 'required',
             'location' => 'required',
             'deadline' => 'required',
-            'user_id' => 'required',
             'category_id' => 'required',
         ];
     }

@@ -21,7 +21,9 @@ Route::post('/admin',[AdminController::class,'intex']);
 Route::middleware('auth:sanctum')->apiResource("admins", AdminController::class)->except(['index']);
 
 Route::apiResource('employers',EmployerController::class);
-Route::apiResource('posts',PostController::class);
+Route::middleware('auth:sanctum')->apiResource('posts', PostController::class)->except(['index','show']);
+Route::resource('posts', PostController::class, ['only' => ['index', 'show']]);
+
 Route::apiResource('categories', CategoryController::class);
 Route::get('/jobs/search', [JobSearchController::class, 'search']);
   //   ->middleware('auth:sanctum');
