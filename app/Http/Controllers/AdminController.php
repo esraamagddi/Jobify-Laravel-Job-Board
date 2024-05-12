@@ -14,7 +14,6 @@ use App\Http\Helpers\UploadImages;
 use App\Http\Helpers\CheckAdmin;
 use Exception;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Route; // Add this line
 
 
 class AdminController extends Controller
