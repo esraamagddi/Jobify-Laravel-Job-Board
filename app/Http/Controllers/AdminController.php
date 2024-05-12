@@ -14,7 +14,6 @@ use App\Http\Helpers\UploadImages;
 use App\Http\Helpers\CheckAdmin;
 use Exception;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Route; // Add this line
 
 
 class AdminController extends Controller
@@ -25,11 +24,9 @@ class AdminController extends Controller
 
     public function __construct(Handler $handler)
     {        
-        // $this->middleware('auth:sanctum');
         $this->handler = $handler;
         $this->uploader = new UploadImages();
         $this->checker = new CheckAdmin();
-        // $this->middleware('auth:santcum')->only('update','destroy');
     }
 
     public function index()
@@ -78,6 +75,7 @@ class AdminController extends Controller
         try{
             //
             $admin = User::find($id);
+            // dd($admin);
             if ($admin->role == 'admin'){
                 $isAdmin= $this->checker->isAdmin(Auth::user());
                 if (!$isAdmin){
