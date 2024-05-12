@@ -36,8 +36,7 @@ Route::middleware('auth:sanctum')->apiResource('profiles',    'ProfileController
  * /account
  * /account/update
  * 
- * 
- *
+
 */
 
 // ------------------------------------------------

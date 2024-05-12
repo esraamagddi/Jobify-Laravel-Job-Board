@@ -21,7 +21,7 @@ class ApplicationController extends Controller
     public function change(Request $request)
     {
         $updated_application = DB::table('applications')
-                           ->where('job_id', $request->get('job_id'))
+                           ->where('post_id', $request->get('post_id'))
                            ->where('user_id', auth()->user()->id)->limit(1)
                            ->update(['status' => $request->get('status')]);
 

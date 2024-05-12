@@ -82,7 +82,7 @@ class User extends Authenticatable
     // many-to-many
     public function applications()
     {
-        return $this->belongsToMany('App\Models\Job', 'applications')->withPivot(['user_id', 'job_id', 'resume', 'status']);
+        return $this->belongsToMany('App\Models\Post', 'applications')->withPivot(['user_id', 'post_id', 'resume', 'status']);
     }
 
      // public function applications()
