@@ -25,11 +25,9 @@ class AdminController extends Controller
 
     public function __construct(Handler $handler)
     {        
-        // $this->middleware('auth:sanctum');
         $this->handler = $handler;
         $this->uploader = new UploadImages();
         $this->checker = new CheckAdmin();
-        // $this->middleware('auth:santcum')->only('update','destroy');
     }
 
     public function index()
@@ -78,6 +76,7 @@ class AdminController extends Controller
         try{
             //
             $admin = User::find($id);
+            // dd($admin);
             if ($admin->role == 'admin'){
                 $isAdmin= $this->checker->isAdmin(Auth::user());
                 if (!$isAdmin){

@@ -15,13 +15,10 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 
-Route::apiResource("admins", AdminController::class)->except(['store']);
 
-Route::post('/admins', 'App\Http\Controllers\AdminController@register');
+Route::post('/admin',[AdminController::class,'intex']);
 
-
-Route::middleware('auth:sanctum')->apiResource("admins", AdminController::class)->except(['store', 'index']);
-// Route::apiResource("admins", AdminController::class);
+Route::middleware('auth:sanctum')->apiResource("admins", AdminController::class)->except(['index']);
 
 Route::apiResource('employers',EmployerController::class);
 Route::apiResource('posts',PostController::class);
