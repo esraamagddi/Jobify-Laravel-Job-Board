@@ -47,11 +47,8 @@ class Handler extends ExceptionHandler{
 
         $response = [];
         switch ($statusCode) {
-            case 401:
+            case 401 || 403:
                 $response['message'] = 'Unauthorized';
-                break;
-            case 403:
-                $response['message'] = 'Forbidden';
                 break;
             case 404:
                 $response['message'] = 'Not Found';
