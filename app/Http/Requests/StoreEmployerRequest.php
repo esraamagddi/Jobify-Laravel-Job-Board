@@ -26,9 +26,11 @@ class StoreEmployerRequest extends FormRequest
     {
         return [
             'name' => 'required|max:50|min:3',
-            'email' => 'required|unique:employers|email|max:50',
-            'logo' => 'nullable',
+            'email' => 'required|unique:users|email|max:50',
+            'profile_photo_path' => 'nullable',
             'industry' => 'required|max:50',
+            'branches'=>'required',
+            'branding_elements'=>'nullable',
             'password' => 'required|max:16|min:8|regex:/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-={}[\]:;"\'<>,.?\/]).{8,}$/',
         ];
     }

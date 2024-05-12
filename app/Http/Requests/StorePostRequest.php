@@ -31,7 +31,7 @@ class StorePostRequest extends FormRequest
             'work_type' => 'required',
             'location' => 'required',
             'deadline' => 'required',
-            'employer_id' => 'required',
+            'user_id' => 'required',
             'category_id' => 'required',
         ];
     }
