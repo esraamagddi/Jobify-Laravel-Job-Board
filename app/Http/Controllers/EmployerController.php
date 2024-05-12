@@ -5,11 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Exceptions\Handler;
 use App\Models\Employer;
 use Illuminate\Http\Request;
-use App\Http\Requests\StoreEmployerRequest;
 use App\Http\Resources\EmployerResource;
 use App\Http\Helpers\UploadImages;
+use App\Http\Requests\StoreEmployerRequest;
 use App\Models\User;
-use Illuminate\Contracts\Container\Container;
 use Exception;
 
 class EmployerController extends Controller
@@ -35,9 +34,11 @@ class EmployerController extends Controller
     public function store(StoreEmployerRequest $request)
     {
         try{
-            $user_data = $request->only(['name', 'email', 'password', 'role', 'image']);
+            $user_data = $request->only(['name', 'email', 'password', 'role']);
+            $user_data['profile_photo_path'] = $this->uploader->file_operations($request);
             $user = User::create($user_data);
             $user->save();
+            //dd($user);
             $employer_data = $request->only(['industry', 'branches', 'branding_elements']);
             $employer_data['user_id'] = $user->id; 
             $employer = Employer::create($employer_data);
