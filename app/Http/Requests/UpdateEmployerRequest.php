@@ -23,7 +23,7 @@ class UpdateEmployerRequest extends FormRequest
     {
         return [
             'name' => 'max:50|min:3',
-            'email' => 'unique:employers|email|max:50',
+            'email' => 'unique:users|email|max:50',
             'industry' => 'max:50',
             'password' => 'max:16|min:8|regex:/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-={}[\]:;"\'<>,.?\/]).{8,}$/',
         ];
@@ -40,7 +40,6 @@ class UpdateEmployerRequest extends FormRequest
             'password.min' => 'Password must be at least 8 characters',
             'password.regex' => 'The password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character',
             'industry.max'=>'maximum length for industry is 50 letters',
-            'logo.max'=> 'maximum length for logo name is 50 letters',
         ];
     }
 }

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Resources\EmployerResource;
 use App\Http\Helpers\UploadImages;
 use App\Http\Requests\StoreEmployerRequest;
+use App\Http\Requests\UpdateEmployerRequest;
 use Illuminate\Support\Facades\Gate;
 use App\Models\User;
 use Exception;
@@ -60,8 +61,30 @@ class EmployerController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Employer $employer)
+    public function update(UpdateEmployerRequest $request, Employer $employer)
     {
+        try{
+            Gate::authorize('update', $employer);
+
+            $user = $employer->user;
+            $user->name = $request['name'] ?? $user->name;
+            $user->email = $request['email'] ?? $user->email;
+            $user->password = $request['password'] ?? $user->password;
+
+            $user->profile_photo_path = $this->uploader->file_operations($request);
+            $user->update();
+
+            $employer->industry = $request['industry'] ?? $employer->industry;
+            $employer->branding_elements = $request['branding_elements'] ?? $employer->branding_elements;
+            $employer->branches = $request['branches'] ?? $employer->branches;
+
+            $employer->update();
+
+            return response()->json(["message" => 'Employer updated successfully']);
+        } catch (\Exception $e) {
+            return $this->handler->render($request, $e);
+        }
+
     }
 
     /**
@@ -72,6 +95,7 @@ class EmployerController extends Controller
         try{
             Gate::authorize('delete', $employer);
             $employer->delete();
+            $employer->user->delete();
             return response()->json(["message" => 'employer deleted successfully']);
         } catch (Exception $e) {
             return $this->handler->render($request, $e);
