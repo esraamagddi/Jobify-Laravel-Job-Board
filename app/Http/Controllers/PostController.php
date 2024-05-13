@@ -32,8 +32,8 @@ class PostController extends Controller
             return response()->json(['error' => $validator->errors()], 400);
         }
 
-        $categories = Post::paginate($perPage);
-        return PostResource::collection($categories);
+        $posts = Post::paginate($perPage);
+        return PostResource::collection($posts);
     }
 
     /**
