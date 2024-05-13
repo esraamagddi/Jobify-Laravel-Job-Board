@@ -21,10 +21,19 @@ class PostController extends Controller
     {
         $this->handler = $handler;
     }
-    public function index()
+    public function index(Request $request)
     {
-        $posts = Post::paginate(10);
-        return PostResource::collection($posts);
+        $perPage = $request->input('per_page', 10);
+        $validator = Validator::make($request->all(), [
+            'per_page' => 'integer|min:1',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
+        $categories = Post::paginate($perPage);
+        return PostResource::collection($categories);
     }
 
     /**

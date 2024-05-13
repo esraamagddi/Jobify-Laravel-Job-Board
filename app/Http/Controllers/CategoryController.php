@@ -18,8 +18,17 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
-        $posts = Category::paginate(10);
-        return CategoryResources::collection($posts);
+        $perPage = $request->input('per_page', 10);
+        $validator = Validator::make($request->all(), [
+            'per_page' => 'integer|min:1',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
+        $categories = Category::paginate($perPage);
+        return CategoryResources::collection($categories);
 
     }
 
