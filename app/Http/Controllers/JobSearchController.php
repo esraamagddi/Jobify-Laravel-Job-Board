@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Http\Exceptions\Handler;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -10,8 +11,18 @@ use Illuminate\Http\Request;
 
 class JobSearchController extends Controller
 {
+
+    private $handler;
+
+    public function __construct(Handler $handler)
+    {
+        $this->handler = $handler;
+
+    }
+
     public function search(Request $request)
     {
+    try {
         $rules = [
             'keywords' => 'nullable|string',
             'location' => 'nullable|string',
@@ -25,7 +36,7 @@ class JobSearchController extends Controller
 
 
         $validator = Validator::make($request->all(), $rules);
-        
+
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
@@ -36,8 +47,8 @@ class JobSearchController extends Controller
             $query->where(function ($q) use ($request) {
                 $q->where('title', 'like', '%' . $request->keywords . '%')
                   ->orWhere('description', 'like', '%' . $request->keywords . '%')
-                  ->orWhere('responsibilities', 'like', '%' . $request->keywords . '%')
                   ->orWhere('skills', 'like', '%' . $request->keywords . '%')
+                  ->orWhere('responsibilities', 'like', '%' . $request->keywords . '%')
                   ->orWhere('qualifications', 'like', '%' . $request->keywords . '%');
             });
         }
@@ -45,18 +56,16 @@ class JobSearchController extends Controller
         if ($request->filled('location')) {
             $query->where('location', $request->location);
         }
+        if ($request->filled('skills')) {
+            $query->Where('skills', 'like', '%' . $request->skills . '%');
+        }
 
         if ($request->filled('category')) {
             $query->where('category_id', $request->category);
         }
 
-        if ($request->filled('experience_level')) {
-            $query->where('experience_level', $request->experience_level);
-        }
-
         if ($request->filled('salary_range')) {
-            $salaryRange = explode('-', $request->salary_range);
-            $query->whereBetween('salary_range', [trim($salaryRange[0]), trim($salaryRange[1])]);
+            $query->whereBetween('salary_range', [0,  $request->salary_range]);
         }
 
         if ($request->filled('work_type')) {
@@ -64,7 +73,7 @@ class JobSearchController extends Controller
         }
 
         if ($request->filled('deadline')) {
-            $query->whereDate('deadline', '=', $request->deadline);
+            $query->whereDate('deadline', $request->deadline);
         }
 
         if ($request->filled('employer_name')) {
@@ -77,18 +86,30 @@ class JobSearchController extends Controller
         $jobs = $query->with('category')->paginate(10);
 
         return response()->json($jobs);
+
+    } catch (Exception $e) {
+        return $this->handler->render($request, $e);
+    }
     }
 
     public function getLocations()
 {
-    $locations = Job::select('location')->distinct()->get();
+try {
+    $locations = Post::select('location')->distinct()->get();
     return response()->json($locations);
+} catch (Exception $e) {
+    return $this->handler->render($request, $e);
+}
 }
 
 public function getCategories()
 {
+try {
     $categories = Category::all();
     return response()->json($categories);
+} catch (Exception $e) {
+    return $this->handler->render($request, $e);
+}
 }
 
 }
