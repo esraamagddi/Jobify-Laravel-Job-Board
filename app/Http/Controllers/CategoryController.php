@@ -39,12 +39,14 @@ class CategoryController extends Controller
     {
         $validatedData = $request->validate([
             'name' => 'required|unique:categories|max:50',
-            'user_id' => 'required',
         ]);
 
+        $user_id = Auth::id();
+        $validatedData['user_id'] = $user_id;
+
         Gate::authorize('create', Category::class);
-            $category = Category::create($validatedData);
-            return new CategoryResources($category);
+        $category = Category::create($validatedData);
+        return new CategoryResources($category);
     }
 
     /**
