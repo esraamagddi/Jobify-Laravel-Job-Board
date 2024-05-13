@@ -51,7 +51,7 @@ class EmployerController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request,Employer $employer)
+    public function show(Employer $employer)
     {
             return new EmployerResource($employer);
     }

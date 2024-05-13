@@ -2,13 +2,34 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Exceptions\Handler;
+use Illuminate\Auth\Access\AuthorizationException;
 use App\Models\Application;
 use Illuminate\Http\Request;
 use App\Http\Resources\ApplicationResource;
 use Illuminate\Support\Facades\Validator;
+use App\Events\AppNotificationEvent;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
+use Closure;
+use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ApplicationController extends Controller
 {
+
+    private $handler;
+
+    public function __construct(Handler $handler)
+    {
+        $this->handler = $handler;
+    }
+    public static function middleware(): array
+    {
+        return [
+            'auth:sanctum',
+        ];
+    }
     /**
      * Display a listing of the resource.
      */
@@ -73,51 +94,30 @@ class ApplicationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Application $application)
     {
-        $validator = Validator::make($request->all(), [
-            'user_id' => 'required|integer',
-            'post_id' => 'required|integer',
-            'resume' => 'file|mimes:pdf|max:2048',
-            'contact_details' => 'nullable|string',
-            'app_email' => 'required|email',
-            'app_phone' => 'required|string',
-
-
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-
-        $application = Application::find($id);
-
-        if ($application == null) {
-            return response()->json(["error" => "application not found"], 404);
-        }
-
-        $filePath = $application->resume;
-
-        if ($request->hasFile("resume")) {
-
-            if (file_exists(public_path('storage/' . $filePath))) {
-                unlink(public_path('storage/' . $filePath));
+        try{
+            $validator = Validator::make($request->all(), [
+                "status" => "required|in:accepted,rejected",
+            ]);
+            if ($validator->fails()) {
+                return response()->json(['message'=>'Validation failed','data' => $validator->errors()], 422);
             }
+    
 
-            $file = $request->file('resume');
-            $filePath = $file->store('resumes', 'public');
+           //dd(Auth::user()->role !== 'employer' || Auth::user()->id !== $application->user_id);
+        if(Auth::user()->role !== 'employer' || Auth::user()->id !== $application->user_id)
+        {
+             throw new AuthorizationException('Unauthorized');
         }
-
-        $application->update([
-            'user_id' => $request->user_id,
-            'post_id' => $request->post_id,
-            'resume' => $filePath,
-            'contact_details' => $request->contact_details,
-            'app_email' => $request->app_email,
-            'app_phone' => $request->app_phone,
-        ]);
-
-        return new ApplicationResource($application);
+            $application->update([
+                'status' => $request->status,
+            ]);
+    
+            return new ApplicationResource($application);
+        }catch (\Exception $e){
+            return $this->handler->render($request,$e);
+        }
     }
 
     /**

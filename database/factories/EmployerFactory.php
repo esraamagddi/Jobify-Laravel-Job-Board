@@ -2,7 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\Employer;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Hash;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Employer>
@@ -17,11 +19,12 @@ class EmployerFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
             'industry' => $this->faker->randomElement(['Technology', 'Finance', 'Healthcare', 'Education', 'Hospitality']),
-            'password' => bcrypt('password'), // You might want to change this to generate a secure password
-
+            'branches'=> $this->faker->randomElement(['giza', 'cairo']),
+            'branding_elements'=> $this->faker->randomElement(['Logo', 'Slogan', 'Color Scheme', 'Typography']),
+            'user_id' => function () {
+                return \App\Models\User::factory()->create()->id;
+            },
         ];
     }
 }
