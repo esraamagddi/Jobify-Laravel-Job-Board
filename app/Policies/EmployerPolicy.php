@@ -37,7 +37,7 @@ class EmployerPolicy
      */
     public function update(User $user, Employer $employer): bool
     {
-        //
+        return $user->id === $employer->user_id;
     }
 
     /**
@@ -45,7 +45,11 @@ class EmployerPolicy
      */
     public function delete(User $user, Employer $employer): bool
     {
-        //
+        if($user->role === 'admin'){
+            return true;
+        }
+
+        return $user->id === $employer->user_id;
     }
 
     /**

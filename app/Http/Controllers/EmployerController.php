@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Resources\EmployerResource;
 use App\Http\Helpers\UploadImages;
 use App\Http\Requests\StoreEmployerRequest;
+use Illuminate\Support\Facades\Gate;
 use App\Models\User;
 use Exception;
 
@@ -40,7 +41,7 @@ class EmployerController extends Controller
             $user->save();
             //dd($user);
             $employer_data = $request->only(['industry', 'branches', 'branding_elements']);
-            $employer_data['user_id'] = $user->id; 
+            $employer_data['user_id'] = $user->id;
             $employer = Employer::create($employer_data);
             $employer->save();
             return new EmployerResource($employer);
@@ -66,9 +67,14 @@ class EmployerController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Employer $employer)
+    public function destroy(Request $request, Employer $employer)
     {
-        $employer->delete();
-        return response()->json(["message" => 'employer deleted successfully']);
+        try{
+            Gate::authorize('delete', $employer);
+            $employer->delete();
+            return response()->json(["message" => 'employer deleted successfully']);
+        } catch (Exception $e) {
+            return $this->handler->render($request, $e);
+        }
     }
 }

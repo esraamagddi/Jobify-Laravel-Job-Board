@@ -20,7 +20,9 @@ Route::post('/admin',[AdminController::class,'intex']);
 
 Route::middleware('auth:sanctum')->apiResource("admins", AdminController::class)->except(['index']);
 
-Route::apiResource('employers',EmployerController::class);
+// employers
+Route::middleware('auth:sanctum')->apiResource('employers', EmployerController::class)->except(['index','show','store']);
+Route::apiResource('employers',EmployerController::class, ['only' => ['index','show','store']]);
 
 // posts
 Route::middleware('auth:sanctum')->apiResource('posts', PostController::class)->except(['index','show']);
@@ -28,7 +30,7 @@ Route::resource('posts', PostController::class, ['only' => ['index', 'show']]);
 
 // categories
 Route::middleware('auth:sanctum')->apiResource('categories', CategoryController::class)->except(['index','show']);
-Route::apiResource('categories', CategoryController::class, ['only' => ['index', 'show']]);
+Route::apiResource('categories', CategoryController::class, ['only' => ['index','show']]);
 
 Route::get('/jobs/search', [JobSearchController::class, 'search']);
   //   ->middleware('auth:sanctum');
