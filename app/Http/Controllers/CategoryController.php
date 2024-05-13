@@ -5,16 +5,22 @@ namespace App\Http\Controllers;
 use App\Http\Resources\CategoryResources;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Auth;
+
 
 class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::paginate(10);
-        return CategoryResources::collection($categories);
+        $posts = Category::paginate(10);
+        return CategoryResources::collection($posts);
+
     }
 
     /**
@@ -22,8 +28,14 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $category = Category::create($request->all());
-        return new CategoryResources($category);
+        $validatedData = $request->validate([
+            'name' => 'required|unique:categories|max:50',
+            'user_id' => 'required',
+        ]);
+
+        Gate::authorize('create', Category::class);
+            $category = Category::create($validatedData);
+            return new CategoryResources($category);
     }
 
     /**
@@ -39,16 +51,35 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        $category->update($request->all());
-        return new CategoryResources($category);
+        if (!Auth::check()) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        try {
+            $validatedData = $request->validate([
+                'name' => 'required|unique:categories|max:50',
+            ]);
+
+            Gate::authorize('update', $category);
+
+            $category->update([
+                'name' => $request->input('name'),
+            ]);
+
+            return new CategoryResources($category);
+        } catch (ValidationException $e) {
+            return response()->json(['errors' => $e->errors()], 422);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Category $category)
+    public function destroy(Request $request, Category $category)
     {
-        $category->delete();
-        return response()->json(['message' => 'Category deleted']);
+            Gate::authorize('delete', $category);
+
+            $category->delete();
+            return response()->json(['message' => 'Category deleted']);
     }
 }

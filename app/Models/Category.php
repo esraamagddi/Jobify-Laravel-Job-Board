@@ -10,10 +10,15 @@ use App\Models\Post;
 class Category extends Model
 {
     use HasFactory;
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'user_id'];
 
     public function post(): HasMany
     {
         return $this->hasMany(Post::class, 'category_id', 'id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 }

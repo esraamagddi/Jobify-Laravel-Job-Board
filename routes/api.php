@@ -11,7 +11,7 @@ use App\Http\Controllers\JobSearchController;
 use App\Http\Controllers\AuthController;
 
 Route::get('/user', function (Request $request) {
-  return $request->user();
+    return $request->user();
 })->middleware('auth:sanctum');
 
 
@@ -21,10 +21,15 @@ Route::post('/admin',[AdminController::class,'intex']);
 Route::middleware('auth:sanctum')->apiResource("admins", AdminController::class)->except(['index']);
 
 Route::apiResource('employers',EmployerController::class);
+
+// posts
 Route::middleware('auth:sanctum')->apiResource('posts', PostController::class)->except(['index','show']);
 Route::resource('posts', PostController::class, ['only' => ['index', 'show']]);
 
-Route::apiResource('categories', CategoryController::class);
+// categories
+Route::middleware('auth:sanctum')->apiResource('categories', CategoryController::class)->except(['index','show']);
+Route::apiResource('categories', CategoryController::class, ['only' => ['index', 'show']]);
+
 Route::get('/jobs/search', [JobSearchController::class, 'search']);
   //   ->middleware('auth:sanctum');
 Route::get('/locations', [JobSearchController::class, 'getLocations']);

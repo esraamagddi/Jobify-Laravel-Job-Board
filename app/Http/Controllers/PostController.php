@@ -9,6 +9,7 @@ use App\Http\Resources\PostResource;
 use App\Http\Exceptions\Handler;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
 {

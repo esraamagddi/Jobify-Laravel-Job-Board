@@ -23,7 +23,7 @@ class AdminController extends Controller
     private $checker;
 
     public function __construct(Handler $handler)
-    {        
+    {
         $this->handler = $handler;
         $this->uploader = new UploadImages();
         $this->checker = new CheckAdmin();
@@ -33,7 +33,7 @@ class AdminController extends Controller
     {
         //
 
-        return UserResource::collection(User::paginate(5));    
+        return UserResource::collection(User::paginate(5));
     }
 
     /**
@@ -47,7 +47,7 @@ class AdminController extends Controller
                     return response()->json(['error' => 'Unauthorized'], 401);
                 }
             }
-    
+
             try{
                 $file_path = $this->uploader->file_operations($request);
                 $request_params['profile_photo_path'] = $file_path;
@@ -63,7 +63,7 @@ class AdminController extends Controller
             }
         }
 
-    
+
 
 
     /**
@@ -87,19 +87,19 @@ class AdminController extends Controller
         catch (Exception $e) {
             return response()->json(['error' => 'Admin not found'], 404);
         }
-        
+
     }
-    
-    
+
+
 
 
     /**
      * Update the specified resource in storage.
      */
-    
+
  public function update(UpdateAdminRequest $request, $id)
     {
-               
+
         // dd($request);
         try {
 
@@ -113,7 +113,7 @@ class AdminController extends Controller
 
             $file_path = $this->uploader->file_operations($request);
             $request_params = $request->all();
-        
+
             if ($file_path != null) {
                 $request_params['image'] = $file_path;
             }
@@ -122,12 +122,12 @@ class AdminController extends Controller
             }
             $admin->update($request_params);
             return response()->json(['message' => 'Admin updated successfully', 'admin' => new UserResource($admin)], 200);
-         } 
+         }
         catch (Exception $e) {
             return response()->json(['error' => 'Admin not found'], 404);
         }
     }
-    
+
 
     /**
      * Remove the specified resource from storage.
@@ -142,14 +142,14 @@ class AdminController extends Controller
                 return response()->json(['error' => 'Unauthorized'], 401);
             }
         }
-    
+
         if ($admin->profile_photo_path != null) {
             unlink(public_path('images/users/' . $admin->profile_photo_path));
             Storage::delete($admin->profile_photo_path);
         }
-        
+
         $admin->delete();
-        return response()->json(['message' => 'Admin deleted successfully']); 
+        return response()->json(['message' => 'Admin deleted successfully']);
     }
 
     public function updatePostStatus(Request $request, $id)
