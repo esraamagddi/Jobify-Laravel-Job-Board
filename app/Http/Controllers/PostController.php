@@ -33,7 +33,7 @@ class PostController extends Controller
     {
         try {
             Gate::authorize('create', Post::class);
-            $post_data = $request->all();   
+            $post_data = $request->all();
             $post_data['user_id'] = Auth::user()->id;
             $post = Post::create($post_data);
             return new PostResource($post);
@@ -56,7 +56,6 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-
         try {
 
             Gate::authorize('update', $post);
