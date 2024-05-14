@@ -29,7 +29,9 @@ class JobSearchController extends Controller
             'category' => 'nullable|exists:categories,id',
             'experience_level' => 'nullable|string',
             'salary_range' => 'nullable|string',
-            'work_type' => 'nullable|in:offline,remote,hybrid',
+           // 'work_type' => 'nullable|in:offline,remote,hybrid',
+           'work_type' => 'nullable|array',
+           'work_type.*' => 'in:offline,remote,hybrid',
             'deadline' => 'nullable|date_format:Y-m-d',
             'employer_name' => 'nullable|string',
         ];
@@ -69,8 +71,9 @@ class JobSearchController extends Controller
         }
 
         if ($request->filled('work_type')) {
-            $query->where('work_type', $request->work_type);
+            $query->whereIn('work_type', $request->work_type);
         }
+
 
         if ($request->filled('deadline')) {
             $query->whereDate('deadline', $request->deadline);
@@ -83,7 +86,8 @@ class JobSearchController extends Controller
          }
 
 
-        $jobs = $query->with('category')->paginate(10);
+         $jobs = $query->with(['category', 'employer'])->paginate(4);
+
 
         return response()->json($jobs);
 
