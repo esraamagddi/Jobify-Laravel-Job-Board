@@ -7,6 +7,8 @@ use Illuminate\Auth\Access\AuthorizationException;
 use App\Models\Application;
 use Illuminate\Http\Request;
 use App\Http\Resources\ApplicationResource;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Events\AppNotificationEvent;
 use Illuminate\Routing\Controllers\HasMiddleware;

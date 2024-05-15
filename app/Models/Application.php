@@ -1,19 +1,25 @@
 <?php
 
 namespace App\Models;
-use App\Models\User;
-use App\Models\Post;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
+use App\Models\Post;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
-
 class Application extends Model implements HasMedia
 {
+    use HasFactory;
     use InteractsWithMedia;
 
-    use HasFactory;
+    protected $guarded = [];
+
+    public function jobs()
+    {
+        return $this->hasMany('App\Models\Job');
+    }
 
     protected $fillable = [
         'user_id',
@@ -34,4 +40,5 @@ class Application extends Model implements HasMedia
     {
         return $this->belongsTo(Post::class,'post_id','id');
     }
+
 }
