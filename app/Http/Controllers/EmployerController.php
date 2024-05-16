@@ -68,11 +68,13 @@ class EmployerController extends Controller
     public function show(Request $request, $id)
     {
         try {
-            $employer = Employer::where('user_id', $id)->first();
-            return new EmployerResource($employer);
+            $employer = Employer::where('user_id', $id)->with('posts')->first();
+
             if (!$employer) {
                 throw new NotFoundHttpException('Employer not found');
             }
+
+            return new EmployerResource($employer);
         } catch (Exception $e) {
             return $this->handler->render($request, $e);
         }
