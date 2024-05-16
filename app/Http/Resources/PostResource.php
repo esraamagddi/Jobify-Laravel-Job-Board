@@ -25,7 +25,7 @@ class PostResource extends JsonResource
             'work_type' => $this->work_type,
             'location' => $this->location,
             'deadline' => $this->deadline,
-            'employer' => $this->employer->name,
+            'employer' => $this->employer,
             'category' => $this->category->name,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
