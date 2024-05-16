@@ -25,7 +25,7 @@ class JobSearchController extends Controller
 
 
         $validator = Validator::make($request->all(), $rules);
-        
+
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
@@ -81,7 +81,7 @@ class JobSearchController extends Controller
 
     public function getLocations()
 {
-    $locations = Job::select('location')->distinct()->get();
+    $locations = Post::select('location')->distinct()->get();
     return response()->json($locations);
 }
 
