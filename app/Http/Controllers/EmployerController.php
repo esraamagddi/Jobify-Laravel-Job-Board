@@ -38,7 +38,7 @@ class EmployerController extends Controller
         }
 
         $employers = Employer::paginate($perPage);
-        return EmployerResource::collection($employers);
+        return response()->json(['data' => EmployerResource::collection($employers), 'count' => collect($employers)->count()]);
     }
 
     /**
@@ -46,7 +46,7 @@ class EmployerController extends Controller
      */
     public function store(StoreEmployerRequest $request)
     {
-        try{
+        try {
             $user_data = $request->only(['name', 'email', 'password']);
             $user_data['role'] = 'employer';
             $user_data['profile_photo_path'] = $this->uploader->file_operations($request);
@@ -65,15 +65,15 @@ class EmployerController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request,$id)
+    public function show(Request $request, $id)
     {
-        try{
+        try {
             $employer = Employer::where('user_id', $id)->first();
-                return new EmployerResource($employer);
-                if (!$employer) {
-                    throw new NotFoundHttpException('Employer not found');
-                }
-        }catch (Exception $e) {
+            return new EmployerResource($employer);
+            if (!$employer) {
+                throw new NotFoundHttpException('Employer not found');
+            }
+        } catch (Exception $e) {
             return $this->handler->render($request, $e);
         }
     }
@@ -83,7 +83,7 @@ class EmployerController extends Controller
      */
     public function update(UpdateEmployerRequest $request, Employer $employer)
     {
-        try{
+        try {
             Gate::authorize('update', $employer);
             $user = $employer->user;
             $user->name = $request['name'] ?? $user->name;
@@ -99,11 +99,10 @@ class EmployerController extends Controller
 
             $employer->update();
 
-            return response()->json(["message" => 'Employer updated successfully','data'=> new EmployerResource($employer)]);
+            return response()->json(["message" => 'Employer updated successfully', 'data' => new EmployerResource($employer)]);
         } catch (\Exception $e) {
             return $this->handler->render($request, $e);
         }
-
     }
 
     /**
@@ -111,7 +110,7 @@ class EmployerController extends Controller
      */
     public function destroy(Request $request, Employer $employer)
     {
-        try{
+        try {
             Gate::authorize('delete', $employer);
             $employer->delete();
             $employer->user->delete();
