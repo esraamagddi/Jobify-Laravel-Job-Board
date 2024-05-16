@@ -41,9 +41,7 @@ Route::middleware('auth:sanctum')->apiResource('profiles',    'ProfileController
 
 // ------------------------------------------------
 
-Route::post('/admin',[AdminController::class,'intex']);
-
-Route::middleware('auth:sanctum')->apiResource("admins", AdminController::class)->except(['index']);
+Route::middleware('auth:sanctum')->apiResource("admins", AdminController::class);
 
 // employers
 Route::middleware('auth:sanctum')->apiResource('employers', EmployerController::class)->except(['index','show','store']);

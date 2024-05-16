@@ -31,11 +31,11 @@ class AdminController extends Controller
 
     public function index()
     {
-        //
-
-        return UserResource::collection(User::paginate(5));
+        return response()->json([
+            'data' => UserResource::collection(User::where('role', 'admin')->paginate(5)),
+            'count' => User::where('role', 'admin')->count()
+            ]);
     }
-
     /**
      * Store a newly created resource in storage.
      */
