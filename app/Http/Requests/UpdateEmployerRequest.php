@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-
+use Illuminate\Validation\Rule;
 class UpdateEmployerRequest extends FormRequest
 {
     /**
@@ -23,7 +23,7 @@ class UpdateEmployerRequest extends FormRequest
     {
         return [
             'name' => 'max:50|min:3',
-            'email' => 'unique:users|email|max:50',
+            'email'=>[Rule::unique('users')->ignore($this->user),'email','max:50'],
             'industry' => 'max:50',
             'password' => 'max:16|min:8|regex:/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-={}[\]:;"\'<>,.?\/]).{8,}$/',
         ];

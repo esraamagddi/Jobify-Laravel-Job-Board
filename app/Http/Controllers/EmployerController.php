@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Exceptions\Handler;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use App\Models\Employer;
 use Illuminate\Http\Request;
 use App\Http\Resources\EmployerResource;
@@ -46,7 +47,8 @@ class EmployerController extends Controller
     public function store(StoreEmployerRequest $request)
     {
         try{
-            $user_data = $request->only(['name', 'email', 'password', 'role']);
+            $user_data = $request->only(['name', 'email', 'password']);
+            $user_data['role'] = 'employer';
             $user_data['profile_photo_path'] = $this->uploader->file_operations($request);
             $user = User::create($user_data);
             $user->save();
@@ -63,9 +65,17 @@ class EmployerController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Employer $employer)
+    public function show(Request $request,$id)
     {
-            return new EmployerResource($employer);
+        try{
+            $employer = Employer::where('user_id', $id)->first();
+                return new EmployerResource($employer);
+                if (!$employer) {
+                    throw new NotFoundHttpException('Employer not found');
+                }
+        }catch (Exception $e) {
+            return $this->handler->render($request, $e);
+        }
     }
 
     /**
@@ -75,7 +85,6 @@ class EmployerController extends Controller
     {
         try{
             Gate::authorize('update', $employer);
-
             $user = $employer->user;
             $user->name = $request['name'] ?? $user->name;
             $user->email = $request['email'] ?? $user->email;
@@ -90,7 +99,7 @@ class EmployerController extends Controller
 
             $employer->update();
 
-            return response()->json(["message" => 'Employer updated successfully']);
+            return response()->json(["message" => 'Employer updated successfully','data'=> new EmployerResource($employer)]);
         } catch (\Exception $e) {
             return $this->handler->render($request, $e);
         }

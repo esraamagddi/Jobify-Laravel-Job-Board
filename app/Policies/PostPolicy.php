@@ -30,6 +30,7 @@ class PostPolicy
      */
     public function create(User $user): bool
     {
+        $user=Auth::user();
         return $user->role=='employer';
     }
 
