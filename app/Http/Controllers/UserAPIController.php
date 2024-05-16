@@ -15,7 +15,10 @@ class UserAPIController extends Controller
      */
     public function index()
     {
-        return UserResource::collection(User::where('role', 'candidate')->paginate(5));
+        return response()->json([
+            'data' => User::where('role', 'candidate')->paginate(5),
+            'count' => User::where('role', 'candidate')->count()
+            ]);
     }
 
     /**

@@ -6,6 +6,7 @@
 /public/resumes
 
 /storage/*.key
+/storage/debugbar
 /vendor
 .env
 .env.backup

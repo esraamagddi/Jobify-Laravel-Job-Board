@@ -37,7 +37,7 @@ class ProfileController extends Controller
      */
     public function show()
     {
-        return new ProfileResource(Profile::where('user_id',auth()->user()->id)->first());
+        return Profile::where('user_id',auth()->user()->id)->first();
     }
 
     /**
