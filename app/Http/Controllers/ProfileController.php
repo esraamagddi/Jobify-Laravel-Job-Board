@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class ProfileController extends Controller
 {
+  
     /**
      * Store profile for candidate
      */

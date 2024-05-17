@@ -41,13 +41,12 @@ Route::middleware('auth:sanctum')->apiResource('profiles',    'ProfileController
 
 
 
-Route::get('/all-users', [AdminController::class,'getAllUsers']);
-Route::get('/all-posts', [PostController::class,'allposts']);
-Route::get('/all-categories', [CategoryController::class,'index']);
+Route::middleware('auth:sanctum')->get('/all-users', [AdminController::class,'getAllUsers']);
+Route::middleware('auth:sanctum')->get('/all-posts', [PostController::class,'allposts']);
+Route::middleware('auth:sanctum')->get('/all-categories', [CategoryController::class,'index']);
+Route::middleware('auth:sanctum')->get('/usersprofile', [AdminController::class,'candidatesWithProfiles']);
 Route::middleware('auth:sanctum')->patch('/users/{id}/activate', [AdminController::class, 'activate']);
 Route::middleware('auth:sanctum')->delete('/users/{id}/deactivate', [AdminController::class, 'deactivate']);
-
-
 Route::middleware('auth:sanctum')->put("/admins/post-update", [AdminController::class,'updatePostStatus']);
 Route::middleware('auth:sanctum')->apiResource("admins", AdminController::class)->except('getAllUsers','updatePostStatus');
 
