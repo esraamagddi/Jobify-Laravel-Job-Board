@@ -40,10 +40,10 @@ class ApplicationController extends Controller implements HasMiddleware
         $validator = Validator::make($request->all(), [
             'user_id' => 'required|integer',
             'post_id' => 'required|integer',
-            'resume' => 'required|file|mimes:pdf',
+            'resume' => 'required|file|mimes:pdf|max:2048',
             'contact_details' => 'nullable|string',
-            'app_email' => 'required|email',
-            'app_phone' => 'required|string',
+            'app_email' => 'required|email|unique:applications,app_email',
+            'app_phone' => 'required|string|unique:applications,app_phone|between:10,12',
         ]);
 
 
