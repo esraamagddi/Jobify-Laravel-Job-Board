@@ -99,4 +99,8 @@ class PostController extends Controller
             return $this->handler->render($request, $e);
         }
     }
+
+    public function getPostsCount(){
+        return Post::count();
+    }
 }

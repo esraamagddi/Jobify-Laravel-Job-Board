@@ -45,8 +45,11 @@ Route::middleware('auth:sanctum')->apiResource('profiles',    'ProfileController
 
 
 Route::get('/all-users', [AdminController::class,'getAllUsers']);
+Route::get('/posts-count', [PostController::class,'getPostsCount']);
+
 Route::middleware('auth:sanctum')->put("/admins/post-update", [AdminController::class,'updatePostStatus']);
 Route::middleware('auth:sanctum')->apiResource("admins", AdminController::class)->except('getAllUsers','updatePostStatus');
+
 
 
 // employers
