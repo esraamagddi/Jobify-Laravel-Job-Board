@@ -103,7 +103,7 @@ class ApplicationController extends Controller implements HasMiddleware
     {
         try{
             $validator = Validator::make($request->all(), [
-                "status" => "required|in:accepted,rejected",
+                "status" => 'required|in:pending,accepted,rejected',
             ]);
             if ($validator->fails()) {
                 return response()->json(['message'=>'Validation failed','data' => $validator->errors()], 422);
@@ -119,6 +119,7 @@ class ApplicationController extends Controller implements HasMiddleware
                 'status' => $request->status,
             ]);
 
+            event(new AppNotificationEvent('New application created: ' . $application->id));
             return new ApplicationResource($application);
         }catch (\Exception $e){
             return $this->handler->render($request,$e);
