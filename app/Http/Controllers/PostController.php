@@ -99,4 +99,11 @@ class PostController extends Controller
             return $this->handler->render($request, $e);
         }
     }
+
+    public function allposts(){
+        return response()->json([
+            'data' => Post::all(),
+            'count' => Post::count()
+        ]);
+}
 }
