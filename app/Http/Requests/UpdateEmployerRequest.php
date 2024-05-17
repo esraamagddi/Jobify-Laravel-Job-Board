@@ -23,7 +23,9 @@ class UpdateEmployerRequest extends FormRequest
     {
         return [
             'name' => 'max:50|min:3',
-            'email'=>[Rule::unique('users')->ignore($this->user),'email','max:50'],
+            'email'=>[Rule::unique('users')->ignore($this->user()->id, 'id')
+            ,'email',
+            'max:50'],
             'industry' => 'max:50',
             'password' => 'max:16|min:8|regex:/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-={}[\]:;"\'<>,.?\/]).{8,}$/',
         ];

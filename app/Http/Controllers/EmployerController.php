@@ -13,6 +13,7 @@ use App\Http\Requests\UpdateEmployerRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
+use App\Models\Post;
 use Exception;
 
 class EmployerController extends Controller
@@ -69,12 +70,12 @@ class EmployerController extends Controller
     {
         try {
             $employer = Employer::where('user_id', $id)->with('posts')->first();
-
+            $employer_posts = Post::where('user_id', $id)->get();
             if (!$employer) {
                 throw new NotFoundHttpException('Employer not found');
             }
 
-            return new EmployerResource($employer);
+            return response()->json(['data'=>new EmployerResource($employer),'posts'=>$employer_posts,'count'=>collect($employer_posts)->count()]);
         } catch (Exception $e) {
             return $this->handler->render($request, $e);
         }
