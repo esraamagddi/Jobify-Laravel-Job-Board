@@ -70,16 +70,20 @@ class EmployerController extends Controller
     public function show(Request $request, $id)
     {
         try {
-            $employer = Employer::where('user_id', $id)->with('posts')->first();
-            $employer_posts = Post::where('user_id', $id)->get();
-            $postIds = $employer_posts->pluck('id');
-            $applications = DB::table('applications')->whereIn('post_id', $postIds)->get();
-
+            $employer = Employer::where('user_id', $id)->with(['posts', 'posts.applications'])->first();            
             if (!$employer) {
                 throw new NotFoundHttpException('Employer not found');
             }
-
-            return response()->json(['data' => new EmployerResource($employer), 'posts' => $employer_posts,'applications' => $applications,'NumberOfPosts' => collect($employer_posts)->count(), 'NumberOfApplications' => collect($applications)->count()]);
+    
+            $employer_posts = $employer->posts;
+            $applications = $employer_posts->flatMap->applications;
+    
+            return response()->json([
+                'data' => new EmployerResource($employer),
+                'posts' => $employer_posts,
+                'NumberOfPosts' => $employer_posts->count(),
+                'NumberOfApplications' => $applications->count()
+            ]);
         } catch (Exception $e) {
             return $this->handler->render($request, $e);
         }
