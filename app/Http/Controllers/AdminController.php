@@ -151,6 +151,25 @@ class AdminController extends Controller
         $admin->delete();
         return response()->json(['message' => 'Admin deleted successfully']);
     }
+    public function deactivate(string $id)
+    {
+        $isAdmin= $this->checker->isAdmin(Auth::user());
+        if (!$isAdmin){
+            return response()->json(['error' => 'Unauthorized'], 401);    
+        }
+            $user = User::find($id);
+            $user->delete();
+    }
+
+    public function activate(string $id)
+    {
+        $isAdmin= $this->checker->isAdmin(Auth::user());
+        if (!$isAdmin){
+            return response()->json(['error' => 'Unauthorized'], 401);    
+        }
+            $user = User::find($id);
+            $user->restore();
+    }
 
     public function getAllUsers()
     {
