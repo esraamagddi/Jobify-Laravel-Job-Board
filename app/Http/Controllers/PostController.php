@@ -100,7 +100,10 @@ class PostController extends Controller
         }
     }
 
-    public function getPostsCount(){
-        return Post::count();
-    }
+    public function allposts(){
+        return response()->json([
+            'data' => Post::all(),
+            'count' => Post::count()
+        ]);
+}
 }
