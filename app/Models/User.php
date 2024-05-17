@@ -31,6 +31,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'image',
         'profile_photo_path'
     ];
 
@@ -78,4 +79,22 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function profile()
+    {
+        return $this->hasOne('App\Models\Profile');
+    }
+
+    // one-to-many
+    public function jobs()
+    {
+        return $this->hasMany('App\Models\Job');
+    }
+    
+    // many-to-many
+    // public function applications()
+    // {
+    //     return $this->belongsToMany('App\Models\Post', 'applications')->withPivot(['user_id', 'post_id', 'resume', 'status']);
+    // }
+    
 }

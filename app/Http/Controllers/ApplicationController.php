@@ -7,15 +7,14 @@ use Illuminate\Auth\Access\AuthorizationException;
 use App\Models\Application;
 use Illuminate\Http\Request;
 use App\Http\Resources\ApplicationResource;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Events\AppNotificationEvent;
 use Illuminate\Routing\Controllers\HasMiddleware;
-use Illuminate\Routing\Controllers\Middleware;
-use Closure;
 use Illuminate\Support\Facades\Auth;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class ApplicationController extends Controller
+class ApplicationController extends Controller implements HasMiddleware
 {
 
     private $handler;
@@ -70,6 +69,8 @@ class ApplicationController extends Controller
             'app_email' => $request->app_email,
             'app_phone' => $request->app_phone,
         ]);
+
+        event(new AppNotificationEvent('New application created: ' . $application->id));
 
         return new ApplicationResource($application);
     }

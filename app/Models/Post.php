@@ -27,4 +27,10 @@ class Post extends Model
     {
         return $this->hasMany(Application::class);
     }
+
+     // many-to-many
+     public function candidates()
+     {
+         return $this->belongsToMany('App\Models\User', 'applications');
+     }
 }

@@ -12,6 +12,11 @@ class Category extends Model
     use HasFactory;
     protected $fillable = ['name', 'user_id'];
 
+    public function jobs()
+    {
+        return $this->hasMany('App\Models\Job');
+    }
+    
     public function post(): HasMany
     {
         return $this->hasMany(Post::class, 'category_id', 'id');

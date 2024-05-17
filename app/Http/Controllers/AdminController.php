@@ -31,11 +31,11 @@ class AdminController extends Controller
 
     public function index()
     {
-        //
-
-        return UserResource::collection(User::paginate(5));
+        return response()->json([
+            'data' => UserResource::collection(User::where('role', 'admin')->paginate(5)),
+            'count' => User::where('role', 'admin')->count()
+            ]);
     }
-
     /**
      * Store a newly created resource in storage.
      */
@@ -152,6 +152,12 @@ class AdminController extends Controller
         return response()->json(['message' => 'Admin deleted successfully']);
     }
 
+    public function getAllUsers()
+    {
+        return response()->json([
+            'data' => UserResource::collection(User::all()),
+        ]);
+    }
     public function updatePostStatus(Request $request, $id)
     {
         $jobPosting = Post::findOrFail($id);

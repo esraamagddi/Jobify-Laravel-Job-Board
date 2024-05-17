@@ -6,6 +6,7 @@
 /public/resumes
 
 /storage/*.key
+/storage/debugbar
 /vendor
 .env
 .env.backup
@@ -19,8 +20,6 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
-<<<<<<< HEAD
 .env.example
-=======
 public/images/
->>>>>>> origin/employers
+config/cors.php
