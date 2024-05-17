@@ -152,6 +152,12 @@ class AdminController extends Controller
         return response()->json(['message' => 'Admin deleted successfully']);
     }
 
+    public function getAllUsers()
+    {
+        return response()->json([
+            'data' => UserResource::collection(User::all()),
+        ]);
+    }
     public function updatePostStatus(Request $request, $id)
     {
         $jobPosting = Post::findOrFail($id);

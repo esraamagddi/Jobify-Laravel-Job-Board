@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\JobSearchController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserAPIController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -41,7 +42,12 @@ Route::middleware('auth:sanctum')->apiResource('profiles',    'ProfileController
 
 // ------------------------------------------------
 
-Route::middleware('auth:sanctum')->apiResource("admins", AdminController::class);
+
+
+Route::get('/all-users', [AdminController::class,'getAllUsers']);
+Route::middleware('auth:sanctum')->put("/admins/post-update", [AdminController::class,'updatePostStatus']);
+Route::middleware('auth:sanctum')->apiResource("admins", AdminController::class)->except('getAllUsers','updatePostStatus');
+
 
 // employers
 Route::middleware('auth:sanctum')->apiResource('employers', EmployerController::class)->except(['index','show','store']);
