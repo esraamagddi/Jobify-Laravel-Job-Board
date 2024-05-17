@@ -153,12 +153,14 @@ class AdminController extends Controller
     }
     public function deactivate(string $id)
     {
-        $isAdmin= $this->checker->isAdmin(Auth::user());
-        if (!$isAdmin){
-            return response()->json(['error' => 'Unauthorized'], 401);    
+        $isAdmin = $this->checker->isAdmin(Auth::user());
+        if (!$isAdmin) {
+            return response()->json(['error' => 'Unauthorized'], 401);
         }
-            $user = User::find($id);
-            $user->delete();
+    
+        $user = User::findOrFail($id);
+        $user->delete(); 
+        return response()->json(['message' => 'User deactivated successfully', 'user' => $user]);
     }
 
     public function activate(string $id)
@@ -167,8 +169,11 @@ class AdminController extends Controller
         if (!$isAdmin){
             return response()->json(['error' => 'Unauthorized'], 401);    
         }
-            $user = User::find($id);
+            $user = User::withTrashed()->findOrFail($id);
+
             $user->restore();
+            return response()->json(['message' => 'user activated successfully',$user]);
+
     }
 
     public function getAllUsers()
