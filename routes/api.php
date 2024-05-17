@@ -16,9 +16,9 @@ Route::get('/user', function (Request $request) {
 
 
 
-Route::post('/admin',[AdminController::class,'intex']);
+Route::post('/admins',[AdminController::class,'store']);
 
-Route::middleware('auth:sanctum')->apiResource("admins", AdminController::class)->except(['index']);
+// Route::middleware('auth:sanctum')->apiResource("admins", AdminController::class)->except(['index']);
 
 Route::apiResource('employers',EmployerController::class);
 Route::apiResource('posts',PostController::class);

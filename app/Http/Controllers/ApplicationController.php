@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Validator;
 use App\Events\AppNotificationEvent;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
-use Closure;
 
 class ApplicationController extends Controller implements HasMiddleware
 {
@@ -17,13 +16,16 @@ class ApplicationController extends Controller implements HasMiddleware
     {
         return [
             'auth:sanctum',
+
         ];
     }
     /**
      * Display a listing of the resource.
      */
     public function index()
+
     {
+
         $applications = Application::paginate(10);
 
         return ApplicationResource::collection($applications);
@@ -34,10 +36,11 @@ class ApplicationController extends Controller implements HasMiddleware
      */
     public function store(Request $request)
     {
+
         $validator = Validator::make($request->all(), [
             'user_id' => 'required|integer',
             'post_id' => 'required|integer',
-            'resume' => 'required|file|mimes:pdf|max:2048',
+            'resume' => 'required|file|mimes:pdf',
             'contact_details' => 'nullable|string',
             'app_email' => 'required|email',
             'app_phone' => 'required|string',
@@ -87,15 +90,9 @@ class ApplicationController extends Controller implements HasMiddleware
      */
     public function update(Request $request, string $id)
     {
+
         $validator = Validator::make($request->all(), [
-            'user_id' => 'required|integer',
-            'post_id' => 'required|integer',
-            'resume' => 'file|mimes:pdf|max:2048',
-            'contact_details' => 'nullable|string',
-            'app_email' => 'required|email',
-            'app_phone' => 'required|string',
-
-
+            'status' => 'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -105,34 +102,17 @@ class ApplicationController extends Controller implements HasMiddleware
         $application = Application::find($id);
 
         if ($application == null) {
-            return response()->json(["error" => "application not found"], 404);
-        }
-
-        $filePath = $application->resume;
-
-        if ($request->hasFile("resume")) {
-
-            if (file_exists(public_path('storage/' . $filePath))) {
-                unlink(public_path('storage/' . $filePath));
-            }
-
-            $file = $request->file('resume');
-            $filePath = $file->store('resumes', 'public');
+            return response()->json(["error" => "Application not found"], 404);
         }
 
         $application->update([
-            'user_id' => $request->user_id,
-            'post_id' => $request->post_id,
-            'resume' => $filePath,
-            'contact_details' => $request->contact_details,
-            'app_email' => $request->app_email,
-            'app_phone' => $request->app_phone,
+            'status' => $request->status,
         ]);
-
         event(new AppNotificationEvent('New application created: ' . $application->id));
 
         return new ApplicationResource($application);
     }
+
 
     /**
      * Remove the specified resource from storage.
