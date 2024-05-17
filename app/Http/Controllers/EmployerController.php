@@ -77,12 +77,13 @@ class EmployerController extends Controller
     
             $employer_posts = $employer->posts;
             $applications = $employer_posts->flatMap->applications;
-    
+            $users = User::all();
             return response()->json([
                 'data' => new EmployerResource($employer),
                 'posts' => $employer_posts,
                 'NumberOfPosts' => $employer_posts->count(),
-                'NumberOfApplications' => $applications->count()
+                'NumberOfApplications' => $applications->count(),
+                'NumberOfUsers'=> $users->count(),
             ]);
         } catch (Exception $e) {
             return $this->handler->render($request, $e);

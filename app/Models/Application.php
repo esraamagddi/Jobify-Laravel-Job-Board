@@ -16,11 +16,6 @@ class Application extends Model implements HasMedia
 
     protected $guarded = [];
 
-    public function jobs()
-    {
-        return $this->hasMany('App\Models\Job');
-    }
-
     protected $fillable = [
         'user_id',
         'post_id',
