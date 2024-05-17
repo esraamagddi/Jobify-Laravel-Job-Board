@@ -66,10 +66,12 @@ Route::middleware('auth:sanctum')->apiResource('categories', CategoryController:
 Route::apiResource('categories', CategoryController::class, ['only' => ['show']]);
 
 
+//search
 Route::get('/jobs/search', [JobSearchController::class, 'search']);
-  //   ->middleware('auth:sanctum');
+Route::get('/jobs/recent', [JobSearchController::class, 'getRecentPosts']);
 Route::get('/locations', [JobSearchController::class, 'getLocations']);
 Route::get('/categories', [JobSearchController::class, 'getCategories']);
+
 Route::resource('applications', ApplicationController::class)->except(['update']);
 Route::middleware('auth:sanctum')->resource('applications',ApplicationController::class,['only'=>['update']]);
 Route::put('/update-status',[AdminController::class,'updatePostStatus']);
