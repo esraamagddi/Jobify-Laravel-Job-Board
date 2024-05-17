@@ -96,7 +96,7 @@ class JobSearchController extends Controller
     }
     }
 
-    public function getLocations()
+    public function getLocations(Request $request)
 {
 try {
     $locations = Post::select('location')->distinct()->get();
@@ -106,7 +106,7 @@ try {
 }
 }
 
-public function getCategories()
+public function getCategories(Request $request)
 {
 try {
     $categories = Category::all();
@@ -114,6 +114,20 @@ try {
 } catch (Exception $e) {
     return $this->handler->render($request, $e);
 }
+}
+
+public function getRecentPosts(Request $request)
+{
+    try {
+
+        $recentPosts = Post::orderBy('created_at', 'desc')->with(['category', 'employer'])->take(4)->get();
+
+        return response()->json($recentPosts);
+    } catch (Exception $e) {
+        return $this->handler->render($request, $e);
+
+
+    }
 }
 
 }

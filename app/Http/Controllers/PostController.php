@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Gate;
 use App\Models\Post;
 use App\Http\Requests\StorePostRequest;
+use App\Http\Requests\UpdatePostRequest;
 use App\Http\Resources\PostResource;
 use App\Http\Exceptions\Handler;
 use Illuminate\Http\Request;
@@ -64,7 +65,7 @@ class PostController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Post $post)
+    public function update(UpdatePostRequest $request, Post $post)
     {
         try {
 
@@ -99,4 +100,11 @@ class PostController extends Controller
             return $this->handler->render($request, $e);
         }
     }
+
+    public function allposts(){
+        return response()->json([
+            'data' => Post::all(),
+            'count' => Post::count()
+        ]);
+}
 }
