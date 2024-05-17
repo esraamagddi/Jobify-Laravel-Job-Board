@@ -33,10 +33,10 @@ Route::middleware('auth:sanctum')->apiResource('profiles',    'ProfileController
 // Route::apiResource('candidates',    'UserAPIController');
 
 /* Profile
-* 
+*
  * /account
  * /account/update
- * 
+ *
 
 */
 

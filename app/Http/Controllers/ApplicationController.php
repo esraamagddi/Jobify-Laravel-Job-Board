@@ -27,13 +27,16 @@ class ApplicationController extends Controller implements HasMiddleware
     {
         return [
             'auth:sanctum',
+
         ];
     }
     /**
      * Display a listing of the resource.
      */
     public function index()
+
     {
+
         $applications = Application::paginate(10);
 
         return ApplicationResource::collection($applications);
@@ -44,13 +47,14 @@ class ApplicationController extends Controller implements HasMiddleware
      */
     public function store(Request $request)
     {
+
         $validator = Validator::make($request->all(), [
             'user_id' => 'required|integer',
             'post_id' => 'required|integer',
             'resume' => 'required|file|mimes:pdf|max:2048',
             'contact_details' => 'nullable|string',
-            'app_email' => 'required|email',
-            'app_phone' => 'required|string',
+            'app_email' => 'required|email|unique:applications,app_email',
+            'app_phone' => 'required|string|unique:applications,app_phone|between:10,12',
         ]);
 
 
@@ -104,7 +108,7 @@ class ApplicationController extends Controller implements HasMiddleware
             if ($validator->fails()) {
                 return response()->json(['message'=>'Validation failed','data' => $validator->errors()], 422);
             }
-    
+
 
            //dd(Auth::user()->role !== 'employer' || Auth::user()->id !== $application->user_id);
         if(Auth::user()->role !== 'employer' || Auth::user()->id !== $application->user_id)
@@ -114,12 +118,13 @@ class ApplicationController extends Controller implements HasMiddleware
             $application->update([
                 'status' => $request->status,
             ]);
-    
+
             return new ApplicationResource($application);
         }catch (\Exception $e){
             return $this->handler->render($request,$e);
         }
     }
+
 
     /**
      * Remove the specified resource from storage.
