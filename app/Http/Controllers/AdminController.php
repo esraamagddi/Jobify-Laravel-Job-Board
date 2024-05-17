@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Post;
+use App\Models\Profile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
@@ -190,6 +191,16 @@ class AdminController extends Controller
         $jobPosting->save();
 
         return response()->json(['message' => 'Updated Successfully', 'job_posting' => $jobPosting]);
+    }
+
+    public function candidatesWithProfiles()
+    {
+        $candidates = User::where('role', 'candidate')->with('profile')->paginate(5);
+        $candidateCount = User::where('role', 'candidate')->count();
+            return response()->json([
+            'data' => $candidates,
+            'count' => $candidateCount,
+        ]);
     }
 
 }
