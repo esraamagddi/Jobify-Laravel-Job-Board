@@ -6,6 +6,7 @@ use App\Http\Exceptions\Handler;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use App\Models\Employer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Resources\EmployerResource;
 use App\Http\Helpers\UploadImages;
 use App\Http\Requests\StoreEmployerRequest;
@@ -71,11 +72,14 @@ class EmployerController extends Controller
         try {
             $employer = Employer::where('user_id', $id)->with('posts')->first();
             $employer_posts = Post::where('user_id', $id)->get();
+            $postIds = $employer_posts->pluck('id');
+            $applications = DB::table('applications')->whereIn('post_id', $postIds)->get();
+
             if (!$employer) {
                 throw new NotFoundHttpException('Employer not found');
             }
 
-            return response()->json(['data'=>new EmployerResource($employer),'posts'=>$employer_posts,'count'=>collect($employer_posts)->count()]);
+            return response()->json(['data' => new EmployerResource($employer), 'posts' => $employer_posts,'applications' => $applications,'NumberOfPosts' => collect($employer_posts)->count(), 'NumberOfApplications' => collect($applications)->count()]);
         } catch (Exception $e) {
             return $this->handler->render($request, $e);
         }
