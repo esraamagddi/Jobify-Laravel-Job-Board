@@ -47,6 +47,9 @@ Route::middleware('auth:sanctum')->apiResource('profiles',    'ProfileController
 Route::get('/all-users', [AdminController::class,'getAllUsers']);
 Route::get('/all-posts', [PostController::class,'allposts']);
 Route::get('/all-categories', [CategoryController::class,'index']);
+Route::patch('/users/{id}/activate', [AdminController::class, 'activate']);
+Route::delete('/users/{id}/deactivate', [AdminController::class, 'deactivate']);
+
 
 Route::middleware('auth:sanctum')->put("/admins/post-update", [AdminController::class,'updatePostStatus']);
 Route::middleware('auth:sanctum')->apiResource("admins", AdminController::class)->except('getAllUsers','updatePostStatus');
