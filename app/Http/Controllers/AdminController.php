@@ -215,6 +215,12 @@ class AdminController extends Controller
                 'count' => $employerCount,
             ]);
         }
+
+        public function trashed()
+        {
+            $trashedUsers = User::onlyTrashed()->with('employer', 'profile')->get();
+            return response()->json($trashedUsers);
+        }
     }
 
 

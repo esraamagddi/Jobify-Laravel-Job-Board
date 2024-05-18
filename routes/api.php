@@ -46,6 +46,7 @@ Route::get('/all-posts', [PostController::class,'allposts']);
 Route::get('/all-categories', [CategoryController::class,'index']);
 Route::middleware('auth:sanctum')->get('/usersprofile', [AdminController::class,'candidatesWithProfiles']);
 Route::middleware('auth:sanctum')->get('/allemployers', [AdminController::class,'allEmployers']);
+Route::middleware('auth:sanctum')->get('/trashed-users', [AdminController::class,'trashed']);
 Route::middleware('auth:sanctum')->patch('/users/{id}/activate', [AdminController::class, 'activate']);
 Route::middleware('auth:sanctum')->delete('/users/{id}/deactivate', [AdminController::class, 'deactivate']);
 Route::middleware('auth:sanctum')->put("/admins/post-update", [AdminController::class,'updatePostStatus']);
@@ -72,7 +73,7 @@ Route::get('/locations', [JobSearchController::class, 'getLocations']);
 Route::get('/categories', [JobSearchController::class, 'getCategories']);
 Route::resource('applications', ApplicationController::class)->except(['update']);
 Route::middleware('auth:sanctum')->resource('applications',ApplicationController::class,['only'=>['update']]);
-Route::put('/update-status',[AdminController::class,'updatePostStatus']);
+Route::put('/update-status/{id}',[AdminController::class,'updatePostStatus']);
 
 // login & logout
 
