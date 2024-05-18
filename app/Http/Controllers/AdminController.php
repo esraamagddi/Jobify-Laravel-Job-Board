@@ -100,7 +100,6 @@ class AdminController extends Controller
  public function update(UpdateAdminRequest $request, $id)
     {
 
-        // dd($request);
         try {
 
             $admin = User::findOrFail($id);
@@ -115,16 +114,19 @@ class AdminController extends Controller
             $request_params = $request->all();
 
             if ($file_path != null) {
-                $request_params['image'] = $file_path;
+                $request_params['profile_photo_path'] = $file_path;
+                unset($request_params['image']);
             }
-            if ($request->has('password')) {
+            if ($request->filled('password')) {
                 $request_params['password'] = bcrypt($request->password);
-            }
+            } else {
+                $request_params['password'] = $admin->password;
+            }          
             $admin->update($request_params);
             return response()->json(['message' => 'Admin updated successfully', 'admin' => new UserResource($admin)], 200);
          }
         catch (Exception $e) {
-            return response()->json(['error' => 'Admin not found'], 404);
+            return $this->handler->render($request, $e);
         }
     }
 

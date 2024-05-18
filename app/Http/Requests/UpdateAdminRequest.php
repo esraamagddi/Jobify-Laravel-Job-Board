@@ -6,6 +6,8 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Validation\Rule;
+
 
 class UpdateAdminRequest extends FormRequest
 {
@@ -34,9 +36,15 @@ class UpdateAdminRequest extends FormRequest
     {
         return [
             'name' => 'sometimes|string|max:255',
-            'email' => 'sometimes|string|email|max:255|unique:admins,email,' . auth()->user()->id,
-            'password' => 'sometimes|string|max:16|min:8|regex:/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-={}[\]:;"\'<>,.?\/]).{8,}$/',
-        ];
+            'email' => [
+                'sometimes',
+                'string',
+                'email',
+                'max:255',
+                Rule::unique('users')->ignore(auth()->user()->id, 'id')
+            ],
+            'password' => 'sometimes|string|min:8|max:16|regex:/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-={}[\]:;"\'<>,.?\/]).{8,}$/',
+        ];        
     }
 
     public function messages(): array

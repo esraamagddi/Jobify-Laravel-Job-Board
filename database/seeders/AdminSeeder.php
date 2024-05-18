@@ -11,7 +11,7 @@ class AdminSeeder extends Seeder
     public function run(): void
     {
         //
-        User::factory()->count(3)->create();
+        User::factory()->count(3)->create(['role' => 'admin']);
 
     }
 }
