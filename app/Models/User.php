@@ -89,6 +89,11 @@ class User extends Authenticatable
         return $this->hasOne('App\Models\Profile');
     }
 
+    public function employer()
+    {
+        return $this->hasOne(Employer::class);
+    }
+
     // one-to-many
     public function jobs()
     {

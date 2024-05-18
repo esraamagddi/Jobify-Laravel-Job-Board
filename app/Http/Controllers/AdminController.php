@@ -13,6 +13,7 @@ use App\Http\Requests\UpdateAdminRequest;
 use App\Http\Exceptions\Handler;
 use App\Http\Helpers\UploadImages;
 use App\Http\Helpers\CheckAdmin;
+use App\Models\Employer;
 use Exception;
 use Illuminate\Support\Facades\Storage;
 
@@ -203,5 +204,17 @@ class AdminController extends Controller
         ]);
     }
 
-}
+   
+        public function allEmployers()
+        {
+            $employers = User::where('role', 'employer')->with('employer')->paginate(5);
+            $employerCount = User::where('role', 'employer')->count();
+        
+            return response()->json([
+                'data' => $employers,
+                'count' => $employerCount,
+            ]);
+        }
+    }
+
 
