@@ -4,9 +4,9 @@ use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\EmployerController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\AdminController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AdminController;
 use App\Http\Controllers\JobSearchController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserAPIController;
@@ -18,6 +18,9 @@ Route::get('/user', function (Request $request) {
 Route::get('test', function () {
     return "Oksssssssssssssss";
 });
+
+
+
 
 // for candidate
 Route::post('/user/register', 'UserController@register');

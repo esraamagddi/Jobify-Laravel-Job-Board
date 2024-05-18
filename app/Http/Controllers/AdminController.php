@@ -123,7 +123,7 @@ class AdminController extends Controller
                 $request_params['password'] = bcrypt($request->password);
             } else {
                 $request_params['password'] = $admin->password;
-            }          
+            }
             $admin->update($request_params);
             return response()->json(['message' => 'Admin updated successfully', 'admin' => new UserResource($admin)], 200);
          }
@@ -155,16 +155,16 @@ class AdminController extends Controller
         $admin->delete();
         return response()->json(['message' => 'Admin deleted successfully']);
     }
-  
+
     public function deactivate(string $id)
     {
         $isAdmin = $this->checker->isAdmin(Auth::user());
         if (!$isAdmin) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
-    
+
         $user = User::findOrFail($id);
-        $user->delete(); 
+        $user->delete();
         return response()->json(['message' => 'User deactivated successfully', 'user' => $user]);
     }
 
@@ -172,7 +172,7 @@ class AdminController extends Controller
     {
         $isAdmin= $this->checker->isAdmin(Auth::user());
         if (!$isAdmin){
-            return response()->json(['error' => 'Unauthorized'], 401);    
+            return response()->json(['error' => 'Unauthorized'], 401);
         }
             $user = User::withTrashed()->findOrFail($id);
 
@@ -190,10 +190,9 @@ class AdminController extends Controller
     public function updatePostStatus(Request $request, $id)
     {
         $jobPosting = Post::findOrFail($id);
-
-        $jobPosting->approved = !($jobPosting->approved) ;
+        $newStatus = $request->getContent();
+        $jobPosting->status = $newStatus;
         $jobPosting->save();
-
         return response()->json(['message' => 'Updated Successfully', 'job_posting' => $jobPosting]);
     }
 
@@ -207,12 +206,12 @@ class AdminController extends Controller
         ]);
     }
 
-   
+
         public function allEmployers()
         {
             $employers = User::where('role', 'employer')->with('employer')->paginate(5);
             $employerCount = User::where('role', 'employer')->count();
-        
+
             return response()->json([
                 'data' => $employers,
                 'count' => $employerCount,

@@ -24,10 +24,18 @@ class StorePostRequest extends FormRequest
             'qualifications' => 'required',
             'salary_range' => 'required|regex:/^(?=.*[0-9])[\d-]+$/',
             'work_type' => 'required',
+            'status' => 'in:pending,accepted,rejected',
             'location' => 'required',
             'deadline' => 'required',
             'category_id' => 'required',
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'status' => $this->input('status', 'pending'),
+        ]);
     }
 
     public function messages(): array
@@ -43,6 +51,7 @@ class StorePostRequest extends FormRequest
             'salary_range.required' => 'salary range is required',
             'salary_range.regex' => 'salary range should be numbers and - only',
             'work_type.required' => 'work type is required',
+            'status.in' => 'The selected status is invalid. It must be either pending, accepted, or rejected.',
             'location.required' => 'location is required',
             'deadline.required' => 'deadline is required',
             'category_id.required' => 'category is required',
