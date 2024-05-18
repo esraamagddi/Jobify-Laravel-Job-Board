@@ -12,6 +12,5 @@ class AdminSeeder extends Seeder
     {
         //
         User::factory()->count(3)->create(['role' => 'admin']);
-
     }
 }

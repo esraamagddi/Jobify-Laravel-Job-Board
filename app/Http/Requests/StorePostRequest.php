@@ -22,7 +22,7 @@ class StorePostRequest extends FormRequest
             'responsibilities' => 'required',
             'skills' => 'required',
             'qualifications' => 'required',
-            'salary_range' => 'required',
+            'salary_range' => 'required|regex:/^(?=.*[0-9])[\d-]+$/',
             'work_type' => 'required',
             'location' => 'required',
             'deadline' => 'required',
@@ -41,10 +41,10 @@ class StorePostRequest extends FormRequest
             'skills.required' => 'skills are required',
             'qualifications.required' => 'qualifications are required',
             'salary_range.required' => 'salary range is required',
+            'salary_range.regex' => 'salary range should be numbers and - only',
             'work_type.required' => 'work type is required',
             'location.required' => 'location is required',
             'deadline.required' => 'deadline is required',
-            'employer_id.required' => 'employer is required',
             'category_id.required' => 'category is required',
         ];
     }

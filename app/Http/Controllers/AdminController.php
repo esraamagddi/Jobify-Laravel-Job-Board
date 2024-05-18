@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Post;
+use App\Models\Profile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
@@ -12,6 +13,7 @@ use App\Http\Requests\UpdateAdminRequest;
 use App\Http\Exceptions\Handler;
 use App\Http\Helpers\UploadImages;
 use App\Http\Helpers\CheckAdmin;
+use App\Models\Employer;
 use Exception;
 use Illuminate\Support\Facades\Storage;
 
@@ -153,6 +155,30 @@ class AdminController extends Controller
         $admin->delete();
         return response()->json(['message' => 'Admin deleted successfully']);
     }
+    public function deactivate(string $id)
+    {
+        $isAdmin = $this->checker->isAdmin(Auth::user());
+        if (!$isAdmin) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+    
+        $user = User::findOrFail($id);
+        $user->delete(); 
+        return response()->json(['message' => 'User deactivated successfully', 'user' => $user]);
+    }
+
+    public function activate(string $id)
+    {
+        $isAdmin= $this->checker->isAdmin(Auth::user());
+        if (!$isAdmin){
+            return response()->json(['error' => 'Unauthorized'], 401);    
+        }
+            $user = User::withTrashed()->findOrFail($id);
+
+            $user->restore();
+            return response()->json(['message' => 'user activated successfully',$user]);
+
+    }
 
     public function getAllUsers()
     {
@@ -170,5 +196,27 @@ class AdminController extends Controller
         return response()->json(['message' => 'Updated Successfully', 'job_posting' => $jobPosting]);
     }
 
-}
+    public function candidatesWithProfiles()
+    {
+        $candidates = User::where('role', 'candidate')->with('profile')->paginate(5);
+        $candidateCount = User::where('role', 'candidate')->count();
+            return response()->json([
+            'data' => $candidates,
+            'count' => $candidateCount,
+        ]);
+    }
+
+   
+        public function allEmployers()
+        {
+            $employers = User::where('role', 'employer')->with('employer')->paginate(5);
+            $employerCount = User::where('role', 'employer')->count();
+        
+            return response()->json([
+                'data' => $employers,
+                'count' => $employerCount,
+            ]);
+        }
+    }
+
 

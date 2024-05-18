@@ -4,9 +4,9 @@ use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\EmployerController;
 use App\Http\Controllers\PostController;
-use App\Http\Controllers\AdminController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\JobSearchController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserAPIController;
@@ -18,9 +18,6 @@ Route::get('/user', function (Request $request) {
 Route::get('test', function () {
     return "Oksssssssssssssss";
 });
-
-
-
 
 // for candidate
 Route::post('/user/register', 'UserController@register');
@@ -47,7 +44,10 @@ Route::middleware('auth:sanctum')->apiResource('profiles',    'ProfileController
 Route::get('/all-users', [AdminController::class,'getAllUsers']);
 Route::get('/all-posts', [PostController::class,'allposts']);
 Route::get('/all-categories', [CategoryController::class,'index']);
-
+Route::middleware('auth:sanctum')->get('/usersprofile', [AdminController::class,'candidatesWithProfiles']);
+Route::middleware('auth:sanctum')->get('/allemployers', [AdminController::class,'allEmployers']);
+Route::middleware('auth:sanctum')->patch('/users/{id}/activate', [AdminController::class, 'activate']);
+Route::middleware('auth:sanctum')->delete('/users/{id}/deactivate', [AdminController::class, 'deactivate']);
 Route::middleware('auth:sanctum')->put("/admins/post-update", [AdminController::class,'updatePostStatus']);
 Route::middleware('auth:sanctum')->apiResource("admins", AdminController::class)->except('getAllUsers','updatePostStatus');
 

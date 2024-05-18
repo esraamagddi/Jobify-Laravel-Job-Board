@@ -39,10 +39,22 @@ class UserController extends Controller
     // for candidate
     public function register(UserRequest $request)
     {
+        $role = $request->input('role') ?? 'candidate';
 
+        if ($request->realimage) {
+            $image = $request->realimage;
+            $image->move(public_path('images'), $image->getClientOriginalName());
+        }
+        
         $password = Hash::make($request->input('password'));
-        $request->merge(['password' => $password, 'role' => 'candidate']);
+        $request->merge([
+            'password' => $password,
+            'role' => $role,
+            'image' => $request->realimage ? $request->realimage->getClientOriginalName() : null 
+        ]);
+        
         $user = User::create($request->all());
+        
         $token = $user->createToken('token')->plainTextToken;
 
         if ($user)
