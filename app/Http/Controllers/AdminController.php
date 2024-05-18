@@ -155,6 +155,7 @@ class AdminController extends Controller
         $admin->delete();
         return response()->json(['message' => 'Admin deleted successfully']);
     }
+  
     public function deactivate(string $id)
     {
         $isAdmin = $this->checker->isAdmin(Auth::user());
@@ -217,6 +218,14 @@ class AdminController extends Controller
                 'count' => $employerCount,
             ]);
         }
+
+        public function trashed()
+        {
+            $trashedUsers = User::onlyTrashed()->with('employer', 'profile')->get();
+            return response()->json($trashedUsers);
+        }
     }
+
+
 
 
