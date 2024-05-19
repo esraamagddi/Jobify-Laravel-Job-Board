@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Exceptions\Handler;
-use Illuminate\Auth\Access\AuthorizationException;
-use App\Models\Application;
-use Illuminate\Http\Request;
-use App\Http\Resources\ApplicationResource;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 use App\Events\AppNotificationEvent;
+use App\Http\Exceptions\Handler;
+use App\Http\Resources\ApplicationResource;
+use App\Models\Application;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class ApplicationController extends Controller implements HasMiddleware
 {
@@ -34,7 +33,6 @@ class ApplicationController extends Controller implements HasMiddleware
      * Display a listing of the resource.
      */
     public function index()
-
     {
 
         $applications = Application::paginate(10);
@@ -56,7 +54,6 @@ class ApplicationController extends Controller implements HasMiddleware
             'app_email' => 'required|email|unique:applications,app_email',
             'app_phone' => 'required|string|unique:applications,app_phone|between:10,12',
         ]);
-
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
@@ -88,8 +85,8 @@ class ApplicationController extends Controller implements HasMiddleware
 
         if ($application == null) {
 
-            return  response()->json([
-                "error" => "application not found"
+            return response()->json([
+                "error" => "application not found",
             ], 404);
         }
 
@@ -101,31 +98,28 @@ class ApplicationController extends Controller implements HasMiddleware
      */
     public function update(Request $request, Application $application)
     {
-        try{
+        try {
             $validator = Validator::make($request->all(), [
                 "status" => 'required|in:pending,accepted,rejected',
             ]);
             if ($validator->fails()) {
-                return response()->json(['message'=>'Validation failed','data' => $validator->errors()], 422);
+                return response()->json(['message' => 'Validation failed', 'data' => $validator->errors()], 422);
             }
 
-
-           //dd(Auth::user()->role !== 'employer' || Auth::user()->id !== $application->user_id);
-        if(Auth::user()->role !== 'employer' || Auth::user()->id !== $application->user_id)
-        {
-             throw new AuthorizationException('Unauthorized');
-        }
+            //dd(Auth::user()->role !== 'employer' || Auth::user()->id !== $application->user_id);
+            if (Auth::user()->role !== 'employer') {
+                throw new AuthorizationException('Unauthorized');
+            }
             $application->update([
                 'status' => $request->status,
             ]);
 
-            event(new AppNotificationEvent('New application created: ' . $application->id));
+            //event(new AppNotificationEvent('New application created: ' . $application->id));
             return new ApplicationResource($application);
-        }catch (\Exception $e){
-            return $this->handler->render($request,$e);
+        } catch (\Exception $e) {
+            return $this->handler->render($request, $e);
         }
     }
-
 
     /**
      * Remove the specified resource from storage.
@@ -139,7 +133,6 @@ class ApplicationController extends Controller implements HasMiddleware
         }
 
         $filePath = $application->resume;
-
 
         $application->delete();
 

@@ -22,6 +22,14 @@ class PostController extends Controller
     {
         $this->handler = $handler;
     }
+    public function getPosts(Request $request){
+        try{
+        $posts = Post::all();
+        return response()->json(['data'=>$posts]);
+        }catch(\Exception $e){
+            return $this->handler->render($request,$e);
+    }
+}
     public function index(Request $request)
     {
         $perPage = $request->input('per_page', 10);

@@ -52,7 +52,7 @@ Route::middleware('auth:sanctum')->get('/allemployers', [AdminController::class,
 Route::middleware('auth:sanctum')->get('/trashed-users', [AdminController::class,'trashed']);
 Route::middleware('auth:sanctum')->patch('/users/{id}/activate', [AdminController::class, 'activate']);
 Route::middleware('auth:sanctum')->delete('/users/{id}/deactivate', [AdminController::class, 'deactivate']);
-Route::middleware('auth:sanctum')->put("/admins/{id}/post-update", [AdminController::class,'updatePostStatus']);
+Route::middleware('auth:sanctum')->put("/post-update/{id}", [AdminController::class,'updatePostStatus']);
 Route::middleware('auth:sanctum')->apiResource("admins", AdminController::class)->except('getAllUsers','updatePostStatus');
 
 
@@ -64,7 +64,7 @@ Route::apiResource('employers',EmployerController::class, ['only' => ['index','s
 // posts
 Route::middleware('auth:sanctum')->apiResource('posts', PostController::class)->except(['index','show']);
 Route::resource('posts', PostController::class, ['only' => ['index', 'show']]);
-
+Route::get('/allposts', [PostController::class,'getPosts']);
 // categories
 Route::middleware('auth:sanctum')->apiResource('categories', CategoryController::class)->except(['index','show']);
 Route::apiResource('categories', CategoryController::class, ['only' => ['show']]);
